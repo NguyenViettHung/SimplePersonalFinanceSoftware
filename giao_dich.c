@@ -40,32 +40,43 @@ void hoanVi (struct GiaoDich* a, struct GiaoDich* b){
 }
 
 // Quick Sort (dùng mid pivot)
-void quickSortGiaoDich (struct GiaoDich arr[], int left, int right){
-    if (left>= right) return;
+//void quickSortGiaoDich (struct GiaoDich arr[], int left, int right){
+//    if (left>= right) return;
 
     // chọn mid pivot
-    struct GiaoDich pivot = arr[ left + (right - left)/2];
-    int i = left;
-    int j = right;
-    while (i <= j){
-        while (soSanhNgay (arr[i], pivot) < 0){ // giao dịch đúng vị trí (trước mốc pivot)
-            i++;
-        }
-        while (soSanhNgay (arr[j], pivot) > 0){ // giao dịch đúng vị trí (sau mốc pivot)
-            j--;
-        }
-        if (i <= j){
-            hoanVi(&arr[i], &arr[j]);
-            i++;
-            j--;
-        }
+//   struct GiaoDich pivot = arr[ left + (right - left)/2];
+//  int i = left;
+//    int j = right;
+//    while (i <= j){
+//        while (soSanhNgay (arr[i], pivot) < 0){ // giao dịch đúng vị trí (trước mốc pivot)
+//            i++;
+//        }
+//        while (soSanhNgay (arr[j], pivot) > 0){ // giao dịch đúng vị trí (sau mốc pivot)
+//            j--;
+//        }
+//        if (i <= j){
+//            hoanVi(&arr[i], &arr[j]);
+//            i++;
+//            j--;
+//        }
+//    }
+//    if (left <j){
+//        quickSortGiaoDich (arr, left, j);
+//    }
+//    if (i < right){
+//        quickSortGiaoDich (arr, i, right);
+//    }
+//}
+
+// Insertion sort
+void insertionSortGiaoDich (struct GiaoDich* mang, int soLuong){
+    struct GiaoDich gdMoi = mang[soLuong - 1]; 
+    int i = soLuong -2; // để so sánh phần tử từ kế cuối trở về
+    while (i >= 0&& soSanhNgay(mang[i], gdMoi) > 0){
+        mang[i+1] = mang[i];
+        i--;
     }
-    if (left <j){
-        quickSortGiaoDich (arr, left, j);
-    }
-    if (i < right){
-        quickSortGiaoDich (arr, i, right);
-    }
+    mang[i+1] = gdMoi; //chèn giao dịch mới vào dúng vị trí cần sắp xếp
 }
 
 // Hàm đọc file
@@ -105,8 +116,8 @@ void docFileGiaoDich(){
     }
     fclose(file);
 
-    if (soLuongThu > 1) quickSortGiaoDich (mangThu, 0, soLuongThu - 1);
-    if (soLuongChi > 1) quickSortGiaoDich (mangChi, 0, soLuongChi - 1);
+    //if (soLuongThu > 1) quickSortGiaoDich (mangThu, 0, soLuongThu - 1);
+    //if (soLuongChi > 1) quickSortGiaoDich (mangChi, 0, soLuongChi - 1);
     printf("Đã đọc và sắp xếp file giao dịch thành công\n");
 }
 
