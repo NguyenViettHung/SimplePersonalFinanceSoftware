@@ -6,6 +6,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "khai_bao.h"
+#include "danh_muc.h"
 danhMuc *mangDMThu = NULL;
 danhMuc *mangDMChi = NULL;
 int countDMThu = 0;
