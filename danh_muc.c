@@ -1,12 +1,10 @@
+// Tạo, xóa danh mục
+// Quản lý % cho các danh mục (gồm chia %, hoán đổi %
+// Tính tiền cho các danh mục dựa vào % được chia và ngân sách
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
-typedef struct {
-    int ma_dm; // mã danh mục
-    char ten_dm[50]; // tên danh mục
-    int han_muc; // hạn mức theo phần trăm
-} danhMuc;
 
 danhMuc *mangDMThu = NULL;
 danhMuc *mangDMChi = NULL;
