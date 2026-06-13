@@ -26,6 +26,8 @@ void themGiaoDich        (int so_tien_gd,
                   const char *ghi_chu,
                   int ma_dm);
 void nhapVaThemGiaoDich();
+void xoaGiaoDich(int ngay, int thang, int nam);
+void nhapVaXoaGiaoDich();
 void docFileGiaoDich();
 void ghiFileGiaoDich();
 void giaiPhongGiaoDich();

@@ -499,3 +499,142 @@ void themGiaoDich(int so_tien_gd,
     printf("Them giao dich thanh cong! (Ma GD: %s, Vi tri: %d)\n",
            gd.ma_gd, vi_tri);
 }
+
+// =====================================================
+// XOA GIAO DICH
+// Input : ngay, thang, nam cua giao dich can xoa
+// Flow  : 1. Tim & in tat ca GD trong ngay do
+//         2. Nguoi dung chon ma GD muon xoa
+//         3. Xoa khoi mang (dich trai), cap nhat so du
+// =====================================================
+
+void nhapVaXoaGiaoDich() {
+    int ngay, thang, nam;
+	inDanhSachGiaoDich();
+	scanf("%d%d%d",&ngay,&thang,&nam);
+	xoaBuffer();
+	xoaGiaoDich(ngay,thang,nam);
+}
+
+void xoaGiaoDich(int ngay, int thang, int nam) {
+ 
+    // -- 1. Xay dung ngay so sanh --
+    int ngay_tim = nam * 10000 + thang * 100 + ngay;
+ 
+    // -- 2. Thu thap tat ca GD trong ngay tu ca 2 mang --
+    //    Luu chi so goc (loai, vi_tri) de xoa chinh xac
+    typedef struct { int loai; int vi_tri; } vi_tri_gd;
+    vi_tri_gd ds[1000];
+    int dem = 0;
+ 
+    // Duyet mang_thu
+    for (int i = 0; i < so_luong_thu; i++) {
+        int ngay_gd = mang_thu[i].nam * 10000 + mang_thu[i].thang * 100 + mang_thu[i].ngay;
+        if (ngay_gd == ngay_tim) {
+            ds[dem].loai    = 0;
+            ds[dem].vi_tri  = i;
+            dem++;
+        }
+        if (ngay_gd > ngay_tim) break; // mang da sap xep -> khoi som
+    }
+ 
+    // Duyet mang_chi
+    for (int i = 0; i < so_luong_chi; i++) {
+        int ngay_gd = mang_chi[i].nam * 10000 + mang_chi[i].thang * 100 + mang_chi[i].ngay;
+        if (ngay_gd == ngay_tim) {
+            ds[dem].loai    = 1;
+            ds[dem].vi_tri  = i;
+            dem++;
+        }
+        if (ngay_gd > ngay_tim) break;
+    }
+ 
+    // -- 3. Kiem tra co GD nao trong ngay khong --
+    if (dem == 0) {
+        printf("Khong co giao dich nao vao ngay %02d/%02d/%04d.\n", ngay, thang, nam);
+        return;
+    }
+ 
+    // -- 4. In danh sach GD trong ngay --
+    printf("\n=== GIAO DICH NGAY %02d/%02d/%04d ===\n", ngay, thang, nam);
+    printf("%-6s %-8s %-10s %-5s %-15s %s\n",
+           "Ma GD", "Loai", "So tien", "DM", "Ma NS", "Ghi chu");
+    printf("----------------------------------------------------------\n");
+ 
+    for (int i = 0; i < dem; i++) {
+        struct GiaoDich *gd = (ds[i].loai == 0)
+                              ? &mang_thu[ds[i].vi_tri]
+                              : &mang_chi[ds[i].vi_tri];
+        printf("%-6s %-8s %-10d %-5d %-15s %s\n",
+               gd->ma_gd,
+               (ds[i].loai == 0) ? "THU" : "CHI",
+               gd->so_tien_gd,
+               gd->ma_dm,
+               gd->ma_ns,
+               gd->ghi_chu);
+    }
+    printf("----------------------------------------------------------\n");
+ 
+    // -- 5. Nguoi dung chon ma GD muon xoa --
+    char ma_xoa[15];
+    printf("Nhap ma giao dich muon xoa (hoac 0 de huy): ");
+    if (fgets(ma_xoa, sizeof(ma_xoa), stdin) == NULL) return;
+    ma_xoa[strcspn(ma_xoa, "\n")] = '\0';
+ 
+    if (strcmp(ma_xoa, "0") == 0) {
+        printf("Da huy xoa.\n");
+        return;
+    }
+ 
+    // -- 6. Tim ma GD trong danh sach da loc --
+    int loai_xoa = -1;
+    int vi_tri_xoa = -1;
+    for (int i = 0; i < dem; i++) {
+        struct GiaoDich *gd = (ds[i].loai == 0)
+                              ? &mang_thu[ds[i].vi_tri]
+                              : &mang_chi[ds[i].vi_tri];
+        if (strcmp(gd->ma_gd, ma_xoa) == 0) {
+            loai_xoa    = ds[i].loai;
+            vi_tri_xoa  = ds[i].vi_tri;
+            break;
+        }
+    }
+ 
+    if (vi_tri_xoa == -1) {
+        printf("Khong tim thay ma giao dich \'%s\' trong ngay nay.\n", ma_xoa);
+        return;
+    }
+ 
+    // -- 7. Lay thong tin GD truoc khi xoa (de cap nhat so du) --
+    struct GiaoDich *mang_dich = (loai_xoa == 0) ? mang_thu : mang_chi;
+    int             *so_luong  = (loai_xoa == 0) ? &so_luong_thu : &so_luong_chi;
+    int so_tien_xoa = mang_dich[vi_tri_xoa].so_tien_gd;
+ 
+    printf("Xac nhan xoa GD %s - %d VND - %s? (y/n): ",
+           mang_dich[vi_tri_xoa].ma_gd,
+           mang_dich[vi_tri_xoa].so_tien_gd,
+           mang_dich[vi_tri_xoa].ghi_chu);
+ 
+    char xac_nhan[4];
+    if (fgets(xac_nhan, sizeof(xac_nhan), stdin) == NULL) return;
+    if (xac_nhan[0] != 'y' && xac_nhan[0] != 'Y') {
+        printf("Da huy xoa.\n");
+        return;
+    }
+ 
+    // -- 8. Dich trai de xoa phan tu tai vi_tri_xoa --
+    for (int i = vi_tri_xoa; i < *so_luong - 1; i++) {
+        mang_dich[i] = mang_dich[i + 1];
+    }
+    (*so_luong)--;
+ 
+    // -- 9. Cap nhat so du --
+    if (loai_xoa == 0) {
+        g_so_du -= so_tien_xoa; // xoa GD thu -> so du giam
+    } else {
+        g_so_du += so_tien_xoa; // xoa GD chi -> so du tang
+    }
+ 
+    printf("Da xoa giao dich %s thanh cong. So du hien tai: %d VND\n",
+           ma_xoa, g_so_du);
+}
