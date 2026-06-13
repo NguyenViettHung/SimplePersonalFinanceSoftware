@@ -7,6 +7,10 @@
 
 #include "khai_bao.h"
 
+#define SUC_CHUA_BAN_DAU  10
+#define BUOC_CAP_PHAT      5
+
+void xoaBuffer(void);
 int soSanhNgay (struct GiaoDich a, struct GiaoDich b);
 void hoanVi (struct GiaoDich* a, struct GiaoDich* b);
 void insertionSortGiaoDich (struct GiaoDich* mang, int soLuong);
@@ -15,6 +19,13 @@ void inKetQuaTimKiem (struct GiaoDich mang[], int mangKetQua[], int soKetQua);
 void tinhLaiSoDu(int so_tien_ns_hien_tai);
 void capNhatSoDu (int delta);
 void tinhTongThuChi (int loai_gd_loc, int ngay_loc, int thang_loc, int nam_loc, int ma_dm_loc, int *tongThu, int *tongChi);
+struct GiaoDich nhapGiaoDich();
+void themGiaoDich        (int so_tien_gd,
+                  int ngay, int thang, int nam,
+                  int loai_gd,
+                  const char *ghi_chu,
+                  int ma_dm);
+void nhapVaThemGiaoDich();
 void docFileGiaoDich();
 void ghiFileGiaoDich();
 void giaiPhongGiaoDich();

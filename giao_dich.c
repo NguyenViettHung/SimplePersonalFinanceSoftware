@@ -16,9 +16,15 @@ struct GiaoDich* mangThu = NULL;
 struct GiaoDich* mangChi = NULL;
 int soLuongThu = 0;
 int soLuongChi = 0;
-
+int suc_chua_thu = 0;
+int suc_chua_chi = 0;
 int g_so_du = 0; // biến toàn cục lưu số dư hiện tại, sẽ được cập nhật sau mỗi giao dịch
 
+void xoaBuffer(void)
+{
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
 
 // Hàm hoán vị (sử dụng sau khi đã so sánh ngày => sắp xếp ngày theo đúng trật tự)
 void hoanVi (struct GiaoDich* a, struct GiaoDich* b){
@@ -246,9 +252,9 @@ void ghiFileGiaoDich(){
                 mangThu[i].so_tien_gd,
                 mangThu[i].ngay, mangThu[i].thang, mangThu[i].nam,
                 mangThu[i].loai_gd,
+                mangThu[i].ghi_chu,
                 mangThu[i].ma_ns,
-                mangThu[i].ma_dm, 
-                mangThu[i].ghi_chu); 
+                mangThu[i].ma_dm); 
     }
 
     // Ghi mảng chi
@@ -258,9 +264,9 @@ void ghiFileGiaoDich(){
                 mangChi[i].so_tien_gd,
                 mangChi[i].ngay, mangChi[i].thang, mangChi[i].nam,
                 mangChi[i].loai_gd,
+                mangThu[i].ghi_chu,
                 mangChi[i].ma_ns,
-                mangChi[i].ma_dm, 
-                mangChi[i].ghi_chu);
+                mangChi[i].ma_dm);
     }     
            
     fclose(file);
@@ -275,4 +281,221 @@ void giaiPhongGiaoDich() {
     mangChi = NULL;
     soLuongThu = 0;
     soLuongChi = 0;
+    suc_chua_thu = 0;
+    suc_chua_chi = 0;
+}
+
+// ---------------------------------------------
+// Ham sinh ma_gd tu tang (1, 2, 3...)
+// Duyet 2 mang, lay ID lon nhat roi +1
+// ---------------------------------------------
+static int sinhMaGD() {
+    int max = 0;
+    for (int i = 0; i < so_luong_thu; i++) {
+        int id = atoi(mang_thu[i].ma_gd);
+        if (id > max) max = id;
+    }
+    for (int i = 0; i < so_luong_chi; i++) {
+        int id = atoi(mang_chi[i].ma_gd);
+        if (id > max) max = id;
+    }
+    return max + 1;
+}
+ 
+// ---------------------------------------------
+// Ham them giao dich
+// input : mang (qua bien global), cac truong du lieu
+// output: khong (cap nhat truc tiep bien global)
+//
+// Logic:
+//   1. Kiem tra input
+//   2. Gan vao bien tam gd
+//   3. TH mang day -> realloc them BUOC_CAP_PHAT phan tu
+//   4. Tim vi tri chen tu cuoi mang (so sanh ngay)
+//   5. Dich cac phan tu phia sau ra sau 1 o
+//   6. Gan gd vao vi tri do
+//   7. Cap nhat so du va han muc
+// ---------------------------------------------
+void nhapVaThemGiaoDich() {
+    struct GiaoDich gd = nhapGiaoDich();
+	themGiaoDich(gd.so_tien_gd,
+                 gd.ngay, gd.thang, gd.nam,
+                 gd.loai_gd,
+                 gd.ghi_chu,
+                 gd.ma_dm);
+}
+
+struct GiaoDich nhapGiaoDich() {
+    struct GiaoDich gd;
+    memset(&gd, 0, sizeof(struct GiaoDich));
+    
+    // -- 1. NH?P LO?I GIAO D?CH --
+    printf("\n========== NHAP GIAO DICH ==========\n");
+    printf("Loai giao dich:\n");
+    printf("  0 - Thu (nhap tien)\n");
+    printf("  1 - Chi (chi tien)\n");
+    printf("Chon (0/1): ");
+    
+    int loai_temp;
+    while (scanf("%d", &loai_temp) != 1 || (loai_temp != 0 && loai_temp != 1)) {
+        printf("Loi: Vui long chon 0 hoac 1: ");
+        xoaBuffer();
+    }
+    gd.loai_gd = loai_temp;
+    xoaBuffer();
+    
+    // -- 2. NH?P S? TI?N --
+    printf("\nSo tien giao dich (VND): ");
+    while (scanf("%d", &gd.so_tien_gd) != 1 || gd.so_tien_gd <= 0) {
+        printf("Loi: So tien phai lon hon 0. Nhap lai: ");
+        xoaBuffer();
+    }
+    xoaBuffer();
+    
+    // -- 3. NH?P NG�Y TH�NG NAM --
+    printf("\nNgay giao dich (1-31): ");
+    while (scanf("%d", &gd.ngay) != 1 || gd.ngay < 1 || gd.ngay > 31) {
+        printf("Loi: Ngay phai trong khoang 1-31. Nhap lai: ");
+        xoaBuffer();
+    }
+    xoaBuffer();
+    
+    printf("Thang giao dich (1-12): ");
+    while (scanf("%d", &gd.thang) != 1 || gd.thang < 1 || gd.thang > 12) {
+        printf("Loi: Thang phai trong khoang 1-12. Nhap lai: ");
+        xoaBuffer();
+    }
+    xoaBuffer();
+    
+    printf("Nam giao dich (>= 1900): ");
+    while (scanf("%d", &gd.nam) != 1 || gd.nam < 1900) {
+        printf("Loi: Nam phai >= 1900. Nhap lai: ");
+        xoaBuffer();
+    }
+    xoaBuffer();
+    
+    // X�a newline ? cu?i
+    int len = strlen(gd.ma_ns);
+    if (len > 0 && gd.ma_ns[len - 1] == '\n') {
+        gd.ma_ns[len - 1] = '\0';
+    }
+    
+  
+    
+    // -- 4. NH?P M� DANH M?C --
+    printf("Ma danh muc (> 0): ");
+    while (scanf("%d", &gd.ma_dm) != 1 || gd.ma_dm <= 0) {
+        printf("Loi: Ma danh muc phai > 0. Nhap lai: ");
+        xoaBuffer();
+    }
+    xoaBuffer();
+    
+    // -- 5. NH?P GHI CH� (T�Y CH?N) --
+    printf("Ghi chu (tuy chon, Enter de bo qua): ");
+    fgets(gd.ghi_chu, sizeof(gd.ghi_chu), stdin);
+    
+    // X�a newline ? cu?i
+    len = strlen(gd.ghi_chu);
+    if (len > 0 && gd.ghi_chu[len - 1] == '\n') {
+        gd.ghi_chu[len - 1] = '\0';
+    }
+    
+    return gd;
+}
+
+void themGiaoDich(int so_tien_gd,
+                  int ngay, int thang, int nam,
+                  int loai_gd,
+                  const char *ghi_chu,
+                  int ma_dm)
+{
+    // -- 1. Kiem tra input ---------------------
+     // -- 1. Kiem tra input ---------------------
+    if (so_tien_gd <= 0) {
+        printf("Loi: so tien phai lon hon 0.\n");
+        return;
+    }
+    if (ngay < 1 || ngay > 31 || thang < 1 || thang > 12 || nam < 1900) {
+        printf("Loi: ngay thang nam khong hop le.\n");
+        return;
+    }
+    if (loai_gd != 0 && loai_gd != 1) {
+        printf("Loi: loai giao dich khong hop le (0-thu, 1-chi).\n");
+        return;
+    }
+    if (ma_dm <= 0) {
+        printf("Loi: ma danh muc khong hop le.\n");
+        return;
+    }
+ 
+    // -- 2. Gan vao bien tam -------------------
+    struct GiaoDich gd;
+    int id = sinhMaGD();
+    snprintf(gd.ma_gd, sizeof(gd.ma_gd), "%d", id);
+    gd.so_tien_gd = so_tien_gd;
+    gd.ngay       = ngay;
+    gd.thang      = thang;
+    gd.nam        = nam;
+    gd.loai_gd    = loai_gd;
+    gd.ma_dm      = ma_dm;
+    strncpy(gd.ghi_chu, ghi_chu ? ghi_chu : "", sizeof(gd.ghi_chu) - 1);
+    gd.ghi_chu[sizeof(gd.ghi_chu) - 1] = '\0';
+    snprintf(gd.ma_ns, 15, "NS%04d%02d", nam, thang);
+ 
+    // -- 3. Xac dinh mang dich (dung con tro de tranh lap code) --
+    struct GiaoDich **mang;
+    int             *so_luong;
+    int             *suc_chua;
+ 
+    if (loai_gd == 0) {
+        mang     = &mang_thu;
+        so_luong = &so_luong_thu;
+        suc_chua = &suc_chua_thu;
+    } else {
+        mang     = &mang_chi;
+        so_luong = &so_luong_chi;
+        suc_chua = &suc_chua_chi;
+    }
+ 
+    // -- 4. Mang day -> realloc them BUOC_CAP_PHAT o ----------
+    if (*so_luong == *suc_chua) {
+        int suc_chua_moi = *suc_chua + BUOC_CAP_PHAT;
+        struct GiaoDich *tmp = (struct GiaoDich *)realloc(
+            *mang, suc_chua_moi * sizeof(struct GiaoDich));
+        if (tmp == NULL) {
+            printf("Loi: khong the cap phat bo nho.\n");
+            return;
+        }
+        *mang     = tmp;
+        *suc_chua = suc_chua_moi;
+    }
+ 
+    // -- 5. Tim vi tri chen (duyet nguoc tu cuoi) --------------
+    int vi_tri = *so_luong;
+    for (int i = *so_luong - 1; i >= 0; i--) {
+        if (soSanhNgay((*mang)[i], gd) <= 0) {
+            vi_tri = i + 1;
+            break;
+        }
+        vi_tri = i;
+    }
+ 
+    // -- 6. Dich cac phan tu [vi_tri..so_luong-1] ra sau 1 o --
+    for (int i = *so_luong; i > vi_tri; i--) {
+        (*mang)[i] = (*mang)[i - 1];
+    }
+ 
+    // -- 7. Chen gd vao vi tri tim duoc --------------------
+    (*mang)[vi_tri] = gd;
+    (*so_luong)++;
+ 
+    // -- 8. Cap nhat so du va han muc -------------------------
+    if (loai_gd == 0) {
+        g_so_du += so_tien_gd;
+    } else {
+        g_so_du -= so_tien_gd;
+    }//dang thieu cap nhat han muc
+ 
+    printf("Them giao dich thanh cong! (Ma GD: %s, Vi tri: %d)\n",
+           gd.ma_gd, vi_tri);
 }
