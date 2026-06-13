@@ -1,5 +1,5 @@
 // Tạo, xóa danh mục
-// Quản lý % cho các danh mục (gồm chia %, hoán đổi %
+// Quản lý % cho các danh mục (gồm chia %, hoán đổi %)
 // Tính tiền cho các danh mục dựa vào % được chia và ngân sách
 
 #include <stdio.h>
