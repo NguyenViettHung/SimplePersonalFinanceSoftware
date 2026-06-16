@@ -6,12 +6,12 @@ typedef struct {
     int ma_dm; // mã danh mục
     char ten_dm[50]; // tên danh mục
     int han_muc; // hạn mức theo phần trăm
-} danhMuc;
+} DanhMuc;
 
-danhMuc *mang_dm_thu = NULL;
-danhMuc *mang_dm_chi = NULL;
-int count_dm_thu = 0;
-int count_dm_chi = 0;
+DanhMuc *mang_dm_thu = NULL;
+DanhMuc *mang_dm_chi = NULL;
+int so_luong_dm_thu = 0;
+int so_luong_dm_chi = 0;
 
 void saveData() {
     FILE *file = fopen("danh_muc.txt", "w");
@@ -21,7 +21,7 @@ void saveData() {
     }
 
     // Ghi mảng danh mục thu (số 0 ở đầu)
-    for (int i = 0; i < count_dm_thu; i++) {
+    for (int i = 0; i < so_luong_dm_thu; i++) {
         fprintf(file, "0,%d,%s,%d\n", 
                 mang_dm_thu[i].ma_dm, 
                 mang_dm_thu[i].ten_dm, 
@@ -29,7 +29,7 @@ void saveData() {
     }
 
     // Ghi mảng danh mục chi (số 1 ở đầu)
-    for (int i = 0; i < count_dm_chi; i++) {
+    for (int i = 0; i < so_luong_dm_chi; i++) {
         fprintf(file, "1,%d,%s,%d\n", 
                 mang_dm_chi[i].ma_dm, 
                 mang_dm_chi[i].ten_dm, 
@@ -37,7 +37,7 @@ void saveData() {
     }
 
     fclose(file);
-    printf("\n=> Da luu thanh cong %d danh muc Thu va %d danh muc Chi vao file!\n", count_dm_thu, count_dm_chi);
+    printf("\n=> Da luu thanh cong %d danh muc Thu va %d danh muc Chi vao file!\n", so_luong_dm_thu, so_luong_dm_chi);
 }
 
 void loadData() {
@@ -52,7 +52,7 @@ void loadData() {
     
     // Đọc từng dòng cho đến khi hết file
     while (fgets(line, sizeof(line), file)) {
-        danhMuc dmTemp;
+        DanhMuc dm_temp;
         
         // Xóa ký tự xuống dòng '\n' ở cuối chuỗi nếu có
         line[strcspn(line, "\n")] = 0; 
@@ -70,31 +70,31 @@ void loadData() {
         // Lấy Mã danh mục
         token = strtok(NULL, ",");
         if (token == NULL) continue;
-        dmTemp.ma_dm = atoi(token);
+        dm_temp.ma_dm = atoi(token);
 
         // Lấy Tên danh mục
         token = strtok(NULL, ",");
         if (token == NULL) continue;
-        strcpy(dmTemp.ten_dm, token);
+        strcpy(dm_temp.ten_dm, token);
 
         // Lấy Hạn mức %
         token = strtok(NULL, ",");
         if (token == NULL) continue;
-        dmTemp.han_muc = atoi(token);
+        dm_temp.han_muc = atoi(token);
 
         // Đưa dữ liệu vào đúng mảng dựa trên cờ phân loại
         if (loai_dm == 0) {
-            count_dm_thu++;
-            mang_dm_thu = (danhMuc*) realloc(mang_dm_thu, count_dm_thu * sizeof(danhMuc));
-            mang_dm_thu[count_dm_thu - 1] = dmTemp;
+            so_luong_dm_thu++;
+            mang_dm_thu = (DanhMuc*) realloc(mang_dm_thu, so_luong_dm_thu * sizeof(DanhMuc));
+            mang_dm_thu[so_luong_dm_thu - 1] = dm_temp;
         } 
         else if (loai_dm == 1) {
-            count_dm_chi++;
-            mang_dm_chi = (danhMuc*) realloc(mang_dm_chi, count_dm_chi * sizeof(danhMuc));
-            mang_dm_chi[count_dm_chi - 1] = dmTemp;
+            so_luong_dm_chi++;
+            mang_dm_chi = (DanhMuc*) realloc(mang_dm_chi, so_luong_dm_chi * sizeof(DanhMuc));
+            mang_dm_chi[so_luong_dm_chi - 1] = dm_temp;
         }
     }
 
     fclose(file);
-    printf("=> Da tai du lieu thanh cong: %d Thu | %d Chi.\n", count_dm_thu, count_dm_chi);
+    printf("=> Da tai du lieu thanh cong: %d Thu | %d Chi.\n", so_luong_dm_thu, so_luong_dm_chi);
 }
