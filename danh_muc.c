@@ -8,6 +8,7 @@
 
 #include "khai_bao.h"
 #include "danh_muc.h"
+#include "giao_dich.h"
 danhMuc *mang_dm_thu = NULL;
 danhMuc *mang_dm_chi = NULL;
 int count_dm_thu = 0;
