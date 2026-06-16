@@ -15,14 +15,14 @@ void docFileGiaoDich(){
     }
 
     char line[1000]; 
-    while (fgets (line, sizeof(line), file)){ // lấy từng dòng trong file cho vào line
+    while (fgets (line, sizeof(line), file)){ 
         struct GiaoDich gd_temp;
-        line[strcspn(line, "\n")] = 0; // xóa ký tự xuống dòng (\n)
-        char *token = strtok(line, ","); // strtok = string token
+        line[strcspn(line, "\n")] = 0;
+        char *token = strtok(line, ",");
         if (token == NULL) continue;
-        strcpy(gd_temp.ma_gd, token); // sao chép nội dung token vào ma_gd
+        strcpy(gd_temp.ma_gd, token);
         gd_temp.so_tien_gd= atoi(strtok(NULL,  ","));
-        gd_temp.ngay = atoi(strtok(NULL,  ",")); //atoi = ASCII to interger, ép chuỗi biến thành số nguyên
+        gd_temp.ngay = atoi(strtok(NULL,  ",")); 
         gd_temp.thang = atoi(strtok(NULL,  ","));
         gd_temp.nam = atoi(strtok(NULL, ","));
         gd_temp.loai_gd = atoi(strtok(NULL, ","));
