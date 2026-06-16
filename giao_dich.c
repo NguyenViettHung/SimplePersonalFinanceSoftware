@@ -224,6 +224,47 @@ void giaiPhongGiaoDich() {
     suc_chua_thu = 0;
     suc_chua_chi = 0;
 }
+// Hàm bọc chức năng 4
+void nhapVaTinhTongThuChi() {
+    int loai_gd_loc, ngay_loc, thang_loc, nam_loc, ma_dm_loc;
+    int tong_thu = 0, tong_chi = 0
+    
+    // 1. Nhập loại giao dịch cần thống kê
+    printf("Chọn lọai giao dịch (0: Thu, 1: Chi, 2: Tat ca): ");
+    while (scanf("%d", &loai_gd_loc) != 1 || (loai_gd_loc < 0 || loai_gd_loc > 2)) {
+        printf("Lỗi: Vui lòng nhập 0, 1 hoặc 2: ");
+        xoaBuffer();
+    }
+    xoaBuffer();
+
+    // 2. Nhập các tiêu chí lọc thời gian và danh mục
+    printf("Nhập ngày (Nhập -1 để bỏ qua): ");
+    scanf("%d", &ngay_loc);
+    
+    printf("Nhập tháng (Nhập -1 để bỏ qua): ");
+    scanf("%d", &thang_loc);
+    
+    printf("Nhập năm (Nhập -1 để bỏ qua): ");
+    scanf("%d", &nam_loc);
+    
+    printf("Nhập mã danh mục (Nhập -1 để bỏ qua): ");
+    scanf("%d", &ma_dm_loc);
+    xoaBuffer();
+
+    tinhTongThuChi(loai_gd_loc, ngay_loc, thang_loc, nam_loc, ma_dm_loc, &tong_thu, &tong_chi);
+	
+    if (loai_gd_loc == 0 || loai_gd_loc == 2) {
+        printf("Tổng tiền thu: %d VND\n", tong_thu);
+    }
+    if (loai_gd_loc == 1 || loai_gd_loc == 2) {
+        printf("Tổng tiền chi: %d VND\n", tong_chi);
+    }
+    
+    // Nếu chọn xem cả 2, in thêm dòng chênh lệch (Số dư trong khoảng thời gian đó)
+    if (loai_gd_loc == 2) {
+        printf("Chênh lệch (thu - chi): %d VND\n", tong_thu - tong_chi);
+}
+
 
 // ---------------------------------------------
 // Ham sinh ma_gd tu tang (1, 2, 3...)
