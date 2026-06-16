@@ -16,7 +16,7 @@ int so_luong_giao_dich_thu = 0;
 int so_luong_giao_dich_chi = 0;
 int suc_chua_thu = 0;
 int suc_chua_chi = 0;
-int g_so_du = 0; 
+int g_so_du = 0;   
 
 void xoaBuffer(void)
 {
@@ -73,7 +73,7 @@ static int ngayTrongKhoang (struct GiaoDich *gd, int ngay_bd, int thang_bd, int 
 }
  
 // Tìm kiến nhị phân vị trí bắt đầu trong mảng đã sắp xếp
-static int timViTribat_dau (struct GiaoDich mang[], int so_luong, int ngay_bat_dau){
+static int timViTriBatDau (struct GiaoDich mang[], int so_luong, int ngay_bat_dau){
     int trai = 0, phai = so_luong - 1;
     while (trai < phai){
         int giua = trai + (phai - trai) / 2;
@@ -91,7 +91,7 @@ int timKiemGiaoDich (struct GiaoDich mang[], int so_luong, int ngay_bd, int than
     // Nếu có ngày bắt đầu
     if (ngay_bd != -1 || thang_bd != -1 || nam_bd != -1){
         int ngay_bat_dau = (nam_bd != -1 ? nam_bd : 0) * 10000 + (thang_bd != -1 ? thang_bd : 1) * 100 + (ngay_bd != -1 ? ngay_bd : 1);
-        bat_dau = timViTribat_dau (mang, so_luong, ngay_bat_dau);
+        bat_dau = timViTriBatDau (mang, so_luong, ngay_bat_dau);
     }
 
     // Duyệt tuyến tính từ vị trí bắt đầu đến khi hết mảng hoặc vượt quá ngày kết thúc
@@ -117,10 +117,10 @@ return so_ket_qua;
 // In kết quả ra màn hình
 void inKetQuaTimKiem (struct GiaoDich mang[], int mang_ket_qua[], int so_ket_qua){
     if (so_ket_qua == 0){
-        printf("Không tìm thấy giao dịch nào phù hợp với tiêu chí đã chọn.\n");
+        printf("Khong tim thay giao dich phu hop voi tieu chi đa chon.\n");
         return;
     }
-    printf("\n%-10s %-12s %-15s %-12s %s\n", "Ma GD", "Ngay", "So tien", "Danh muc", "Ghi chu");
+    printf("\n%-10s %-12s %-15s %-12s %s\n", "Ma giao dich", "Ngay", "So tien", "Danh muc", "Ghi chu");
     for (int i = 0; i < so_ket_qua; i++) {
         struct GiaoDich *gd = &mang[mang_ket_qua[i]];
         printf("%-10s %02d/%02d/%04d  %-15d %-12d %s\n", gd -> ma_gd, gd -> ngay, gd -> thang, gd -> nam, gd -> so_tien_gd, gd -> ma_dm, gd -> ghi_chu);
@@ -128,6 +128,32 @@ void inKetQuaTimKiem (struct GiaoDich mang[], int mang_ket_qua[], int so_ket_qua
     printf("Tong: %d giao dich\n\n", so_ket_qua);
 }
 
+// Hàm bọc cho chức năng tìm kiếm để nhúng vào Menu
+void nhapVaTimKiemGiaoDich() {
+    int ngay_bd, thang_bd, nam_bd;
+    int ngay_kt, thang_kt, nam_kt;
+    int ma_dm_loc;
+    printf("Nhap ngay/thang/nam bat đau: ");
+    scanf("%d%d%d", &ngay_bd, &thang_bd, &nam_bd);
+    
+    printf("Nhập ngày/tháng/năm kết thúc: ");
+    scanf("%d%d%d", &ngay_kt, &thang_kt, &nam_kt);
+    
+    printf("Nhap ma danh muc can loc (Nhap -1 đe bo qua): ");
+    scanf("%d", &ma_dm_loc);
+    xoaBuffer();
+
+    // Chuẩn bị mảng chứa kết quả và gọi hàm lõi
+    int mang_ket_qua[1000];
+    int so_ket_qua = timKiemGiaoDich(
+        mang_thu, so_luong_thu, 
+        ngay_bd, thang_bd, nam_bd, 
+        ngay_kt, thang_kt, nam_kt, 
+        ma_dm_loc, mang_ket_qua
+    );
+    
+    inKetQuaTimKiem(mang_thu, mang_ket_qua, so_ket_qua);
+}
 
 // 3. SỐ DƯ
 
@@ -145,7 +171,7 @@ void tinhLaiSoDu(int so_tien_ns_hien_tai){
     g_so_du = so_du;
 
     if (g_so_du < 0){
-        printf("Số dư hiện tại âm: %d VND\n", g_so_du);
+        printf("So du hien tai am: %d VND\n", g_so_du);
     }
 }
 
@@ -153,14 +179,14 @@ void tinhLaiSoDu(int so_tien_ns_hien_tai){
 void capNhatSoDu (int delta){
     g_so_du+= delta;
     if (g_so_du < 0)
-    printf ("Số dư hiện tại âm: %d VND\n", g_so_du);
+    printf ("So du hien tai am: %d VND\n", g_so_du);
 }
 
 
 // 4. TÍNH TOÁN TỔNG THU/CHI THEO NGÀY, THÁNG, NĂM, LOẠI DANH MỤC
 
 // Tính tổng thu chi
-void tinhtong_thuChi (int loai_gd_loc, int ngay_loc, int thang_loc, int nam_loc, int ma_dm_loc, int *tong_thu, int *tong_chi){
+void tinhTongThuChi (int loai_gd_loc, int ngay_loc, int thang_loc, int nam_loc, int ma_dm_loc, int *tong_thu, int *tong_chi){
     *tong_thu = 0;
     *tong_chi = 0;
 
@@ -197,6 +223,47 @@ void giaiPhongGiaoDich() {
     so_luong_giao_dich_chi = 0;
     suc_chua_thu = 0;
     suc_chua_chi = 0;
+}
+// Hàm bọc chức năng 4
+void nhapVaTinhTongThuChi() {
+    int loai_gd_loc, ngay_loc, thang_loc, nam_loc, ma_dm_loc;
+    int tong_thu = 0, tong_chi = 0;
+    
+    // 1. Nhập loại giao dịch cần thống kê
+    printf("Chon loai giao dich (0: Thu, 1: Chi, 2: Tat ca): ");
+    while (scanf("%d", &loai_gd_loc) != 1 || (loai_gd_loc < 0 || loai_gd_loc > 2)) {
+        printf("Loi: Vui long nhap 0, 1 hoac 2: ");
+        xoaBuffer();
+    }
+    xoaBuffer();
+
+    // 2. Nhập các tiêu chí lọc thời gian và danh mục
+    printf("Nhap ngay (Nhap -1 đe bo qua): ");
+    scanf("%d", &ngay_loc);
+    
+    printf("Nhap thang (Nhap -1 đe bo qua): ");
+    scanf("%d", &thang_loc);
+    
+    printf("Nhap nam (Nhap -1 đe bo qua): ");
+    scanf("%d", &nam_loc);
+    
+    printf("Nhap ma danh muc (Nhap -1 đe bo qua): ");
+    scanf("%d", &ma_dm_loc);
+    xoaBuffer();
+
+    tinhTongThuChi(loai_gd_loc, ngay_loc, thang_loc, nam_loc, ma_dm_loc, &tong_thu, &tong_chi);
+	
+    if (loai_gd_loc == 0 || loai_gd_loc == 2) {
+        printf("Tong tien thu: %d VND\n", tong_thu);
+    }
+    if (loai_gd_loc == 1 || loai_gd_loc == 2) {
+        printf("Tong tien chi: %d VND\n", tong_chi);
+    }
+    
+    // Nếu chọn xem cả 2, in thêm dòng chênh lệch (Số dư trong khoảng thời gian đó)
+    if (loai_gd_loc == 2) {
+        printf("Chenh lech (thu - chi): %d VND\n", tong_thu - tong_chi);
+}
 }
 
 // ---------------------------------------------

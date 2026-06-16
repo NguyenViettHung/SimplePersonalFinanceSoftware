@@ -2,12 +2,11 @@
 #define DANH_MUC_H
 
 #include "khai_bao.h"
-
-// ---- Biến toàn cục (extern để các file khác truy cập) ----
-extern DanhMuc *mangDMThu;
-extern DanhMuc *mangDMChi;
-extern int countDMThu;
-extern int countDMChi;
+// Biến toàn cục (extern để các file khác truy cập)
+extern DanhMuc *mang_dm_thu;
+extern DanhMuc *mang_dm_chi;
+extern int so_luong_dm_thu;
+extern int so_luong_dm_chi;
 
 // Chỉ cho phép nhập số nguyên, từ chối chữ/ký tự đặc biệt
 int nhapSoNguyen();
@@ -18,5 +17,5 @@ void chiaPhanTramChi();
 void xoaDanhMucChi();  // Xóa theo ma_dm
 void hoanDoiPhanTramChi();
 void tinhTienDanhMucChi(NganSach ns);
-
+void tinhTiLeChi(NganSach ns);
 #endif
