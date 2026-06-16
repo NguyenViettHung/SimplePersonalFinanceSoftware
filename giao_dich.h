@@ -10,14 +10,6 @@
 #define SUC_CHUA_BAN_DAU  10
 #define BUOC_CAP_PHAT      5
 
-extern GiaoDich* mang_thu;
-extern GiaoDich* mang_chi;
-extern int soLuong_thu;
-extern int soLuong_chi;
-extern int suc_chua_thu;
-extern int suc_chua_chi;
-extern int g_so_du;
-
 void xoaBuffer(void);
 int soSanhNgay (struct GiaoDich a, struct GiaoDich b);
 void hoanVi (struct GiaoDich* a, struct GiaoDich* b);

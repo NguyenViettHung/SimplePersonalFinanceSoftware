@@ -4,8 +4,8 @@
 #include "khai_bao.h"
 
 // ---- Biến toàn cục (extern để các file khác truy cập) ----
-extern danhMuc *mangDMThu;
-extern danhMuc *mangDMChi;
+extern DanhMuc *mangDMThu;
+extern DanhMuc *mangDMChi;
 extern int countDMThu;
 extern int countDMChi;
 

@@ -12,8 +12,7 @@ typedef struct DanhMuc {
 
 // 2. Cấu trúc dữ liệu cho ngân sách
 typedef struct NganSach {
-    char ten_ns[50];   // tên ngân sách: "NS" + năm + tháng VD: NS202605
-    char ma_ns[15];    // mã ngân sách
+    char ma_ns[15];    // mã ngân sách: "NS" + năm + tháng VD: NS202605
     int so_tien_ns;    // số tiền tương ứng với ngân sách
     int thang;         // tháng ứng với ngân sách
     int nam;           // năm ứng với ngân sách

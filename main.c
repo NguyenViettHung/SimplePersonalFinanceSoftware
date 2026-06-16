@@ -7,19 +7,27 @@
 #include "menu.h"
 #include "ngan_sach.h"
 #include "bao_cao.h"
+#include "danh_muc.h"
+#include "menu.h"
 
+extern struct GiaoDich* mang_thu;
+extern struct GiaoDich* mang_chi;
+extern struct NganSach* mang_ngan_sach;
+extern int so_luong_giao_dich_thu;
+extern int so_luong_giao_dich_chi;
+extern int so_luong_ngan_sach;
+
+void giaiPhongBoNho();
 
 int main() {
     napDuLieu();
-	while(True)
-	{
-		hienMenu();
-		//nhap lua chon
-		//nhap input chuc nang
-		//xuat output
-	}
+	dieuHuong();
 	luuDuLieu();
-	giaiPhongBoNho();
 
 	return 0;
+}
+
+void giaiPhongBoNho() {
+	giaiPhongNganSach();
+	giaiPhongGiaoDich();
 }

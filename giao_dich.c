@@ -12,8 +12,8 @@
 
 struct GiaoDich* mang_thu = NULL;
 struct GiaoDich* mang_chi = NULL;
-int so_luong_thu = 0;
-int so_luong_chi = 0;
+int so_luong_giao_dich_thu = 0;
+int so_luong_giao_dich_chi = 0;
 int suc_chua_thu = 0;
 int suc_chua_chi = 0;
 int g_so_du = 0; 
@@ -135,11 +135,11 @@ void inKetQuaTimKiem (struct GiaoDich mang[], int mang_ket_qua[], int so_ket_qua
 void tinhLaiSoDu(int so_tien_ns_hien_tai){
     int so_du = so_tien_ns_hien_tai;
 
-    for (int i = 0; i < so_luong_thu; i++){
+    for (int i = 0; i < so_luong_giao_dich_thu; i++){
         so_du += mang_thu[i].so_tien_gd;
     }
 
-    for (int i = 0; i < so_luong_chi; i++){
+    for (int i = 0; i < so_luong_giao_dich_chi; i++){
         so_du -= mang_chi[i].so_tien_gd;
     }
     g_so_du = so_du;
@@ -166,7 +166,7 @@ void tinhtong_thuChi (int loai_gd_loc, int ngay_loc, int thang_loc, int nam_loc,
 
     // Duyệt mang_thu
     if (loai_gd_loc == 0 || loai_gd_loc == 2){
-        for (int i = 0; i < so_luong_thu; i++){
+        for (int i = 0; i < so_luong_giao_dich_thu; i++){
             if (ngay_loc != -1 && mang_thu[i].ngay != ngay_loc) continue;
             if (thang_loc != -1 && mang_thu[i].thang != thang_loc) continue;
             if (nam_loc != -1 && mang_thu[i].nam != nam_loc) continue;
@@ -177,7 +177,7 @@ void tinhtong_thuChi (int loai_gd_loc, int ngay_loc, int thang_loc, int nam_loc,
 
     // Duyệt mang_chi
     if (loai_gd_loc == 1 || loai_gd_loc == 2){
-        for (int i = 0; i < so_luong_chi; i++){
+        for (int i = 0; i < so_luong_giao_dich_chi; i++){
             if (ngay_loc != -1 && mang_chi[i].ngay != ngay_loc) continue;
             if (thang_loc != -1 && mang_chi[i].thang != thang_loc) continue;
             if (nam_loc != -1 && mang_chi[i].nam != nam_loc) continue;
@@ -193,8 +193,8 @@ void giaiPhongGiaoDich() {
     free(mang_chi);
     mang_thu = NULL;
     mang_chi = NULL;
-    so_luong_thu = 0;
-    so_luong_chi = 0;
+    so_luong_giao_dich_thu = 0;
+    so_luong_giao_dich_chi = 0;
     suc_chua_thu = 0;
     suc_chua_chi = 0;
 }
@@ -205,11 +205,11 @@ void giaiPhongGiaoDich() {
 // ---------------------------------------------
 static int sinhMaGD() {
     int max = 0;
-    for (int i = 0; i < so_luong_thu; i++) {
+    for (int i = 0; i < so_luong_giao_dich_thu; i++) {
         int id = atoi(mang_thu[i].ma_gd);
         if (id > max) max = id;
     }
-    for (int i = 0; i < so_luong_chi; i++) {
+    for (int i = 0; i < so_luong_giao_dich_chi; i++) {
         int id = atoi(mang_chi[i].ma_gd);
         if (id > max) max = id;
     }
@@ -288,14 +288,6 @@ struct GiaoDich nhapGiaoDich() {
     }
     xoaBuffer();
     
-    // X�a newline ? cu?i
-    int len = strlen(gd.ma_ns);
-    if (len > 0 && gd.ma_ns[len - 1] == '\n') {
-        gd.ma_ns[len - 1] = '\0';
-    }
-    
-  
-    
     // -- 4. NH?P M� DANH M?C --
     printf("Ma danh muc (> 0): ");
     while (scanf("%d", &gd.ma_dm) != 1 || gd.ma_dm <= 0) {
@@ -309,7 +301,7 @@ struct GiaoDich nhapGiaoDich() {
     fgets(gd.ghi_chu, sizeof(gd.ghi_chu), stdin);
     
     // X�a newline ? cu?i
-    len = strlen(gd.ghi_chu);
+    int len = strlen(gd.ghi_chu);
     if (len > 0 && gd.ghi_chu[len - 1] == '\n') {
         gd.ghi_chu[len - 1] = '\0';
     }
@@ -363,11 +355,11 @@ void themGiaoDich(int so_tien_gd,
  
     if (loai_gd == 0) {
         mang     = &mang_thu;
-        so_luong = &so_luong_thu;
+        so_luong = &so_luong_giao_dich_thu;
         suc_chua = &suc_chua_thu;
     } else {
         mang     = &mang_chi;
-        so_luong = &so_luong_chi;
+        so_luong = &so_luong_giao_dich_chi;
         suc_chua = &suc_chua_chi;
     }
  
@@ -424,8 +416,26 @@ void themGiaoDich(int so_tien_gd,
 
 void nhapVaXoaGiaoDich() {
     int ngay, thang, nam;
-	inDanhSachGiaoDich();
-	scanf("%d%d%d",&ngay,&thang,&nam);
+    printf("Nhap thoi gian cua giao dich muon xoa");
+    printf("\nNgay giao dich (1-31): ");
+    while (scanf("%d", &ngay) != 1 || ngay < 1 || ngay > 31) {
+        printf("Loi: Ngay phai trong khoang 1-31. Nhap lai: ");
+        xoaBuffer();
+    }
+    xoaBuffer();
+    
+    printf("Thang giao dich (1-12): ");
+    while (scanf("%d", &thang) != 1 || thang < 1 || thang > 12) {
+        printf("Loi: Thang phai trong khoang 1-12. Nhap lai: ");
+        xoaBuffer();
+    }
+    xoaBuffer();
+    
+    printf("Nam giao dich (>= 1900): ");
+    while (scanf("%d", &nam) != 1 || nam < 1900) {
+        printf("Loi: Nam phai >= 1900. Nhap lai: ");
+        xoaBuffer();
+    }
 	xoaBuffer();
 	xoaGiaoDich(ngay,thang,nam);
 }
@@ -442,7 +452,7 @@ void xoaGiaoDich(int ngay, int thang, int nam) {
     int dem = 0;
  
     // Duyet mang_thu
-    for (int i = 0; i < so_luong_thu; i++) {
+    for (int i = 0; i < so_luong_giao_dich_thu; i++) {
         int ngay_gd = mang_thu[i].nam * 10000 + mang_thu[i].thang * 100 + mang_thu[i].ngay;
         if (ngay_gd == ngay_tim) {
             ds[dem].loai    = 0;
@@ -453,7 +463,7 @@ void xoaGiaoDich(int ngay, int thang, int nam) {
     }
  
     // Duyet mang_chi
-    for (int i = 0; i < so_luong_chi; i++) {
+    for (int i = 0; i < so_luong_giao_dich_chi; i++) {
         int ngay_gd = mang_chi[i].nam * 10000 + mang_chi[i].thang * 100 + mang_chi[i].ngay;
         if (ngay_gd == ngay_tim) {
             ds[dem].loai    = 1;
@@ -521,7 +531,7 @@ void xoaGiaoDich(int ngay, int thang, int nam) {
  
     // -- 7. Lay thong tin GD truoc khi xoa (de cap nhat so du) --
     struct GiaoDich *mang_dich = (loai_xoa == 0) ? mang_thu : mang_chi;
-    int             *so_luong  = (loai_xoa == 0) ? &so_luong_thu : &so_luong_chi;
+    int             *so_luong  = (loai_xoa == 0) ? &so_luong_giao_dich_thu : &so_luong_giao_dich_chi;
     int so_tien_xoa = mang_dich[vi_tri_xoa].so_tien_gd;
  
     printf("Xac nhan xoa GD %s - %d VND - %s? (y/n): ",
