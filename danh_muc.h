@@ -2,12 +2,11 @@
 #define DANH_MUC_H
 
 #include "khai_bao.h"
-#include "giao_dich.h"
-// ---- Biến toàn cục (extern để các file khác truy cập) ----
-extern danhMuc *mang_dm_thu;
-extern danhMuc *mang_dm_chi;
-extern int count_dm_thu;
-extern int count_dm_chi;
+// Biến toàn cục (extern để các file khác truy cập)
+extern DanhMuc *mang_dm_thu;
+extern DanhMuc *mang_dm_chi;
+extern int so_luong_dm_thu;
+extern int so_luong_dm_chi;
 
 // Chỉ cho phép nhập số nguyên, từ chối chữ/ký tự đặc biệt
 int nhapSoNguyen();
