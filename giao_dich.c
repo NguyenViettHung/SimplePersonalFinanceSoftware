@@ -117,10 +117,10 @@ return so_ket_qua;
 // In kết quả ra màn hình
 void inKetQuaTimKiem (struct GiaoDich mang[], int mang_ket_qua[], int so_ket_qua){
     if (so_ket_qua == 0){
-        printf("Không tìm thấy giao dịch nào phù hợp với tiêu chí đã chọn.\n");
+        printf("Khong tim thay giao dich phu hop voi tieu chi đa chon.\n");
         return;
     }
-    printf("\n%-10s %-12s %-15s %-12s %s\n", "Ma GD", "Ngay", "So tien", "Danh muc", "Ghi chu");
+    printf("\n%-10s %-12s %-15s %-12s %s\n", "Ma giao dich", "Ngay", "So tien", "Danh muc", "Ghi chu");
     for (int i = 0; i < so_ket_qua; i++) {
         struct GiaoDich *gd = &mang[mang_ket_qua[i]];
         printf("%-10s %02d/%02d/%04d  %-15d %-12d %s\n", gd -> ma_gd, gd -> ngay, gd -> thang, gd -> nam, gd -> so_tien_gd, gd -> ma_dm, gd -> ghi_chu);
@@ -133,13 +133,13 @@ void nhapVaTimKiemGiaoDich() {
     int ngay_bd, thang_bd, nam_bd;
     int ngay_kt, thang_kt, nam_kt;
     int ma_dm_loc;
-    printf("Nhập ngày/tháng/năm bắt đầu: ");
+    printf("Nhap ngay/thang/nam bat đau: ");
     scanf("%d%d%d", &ngay_bd, &thang_bd, &nam_bd);
     
     printf("Nhập ngày/tháng/năm kết thúc: ");
     scanf("%d%d%d", &ngay_kt, &thang_kt, &nam_kt);
     
-    printf("Nhập mã danh mục cần lọc (Nhập -1 để bỏ qua): ");
+    printf("Nhap ma danh muc can loc (Nhap -1 đe bo qua): ");
     scanf("%d", &ma_dm_loc);
     xoaBuffer();
 
@@ -171,7 +171,7 @@ void tinhLaiSoDu(int so_tien_ns_hien_tai){
     g_so_du = so_du;
 
     if (g_so_du < 0){
-        printf("Số dư hiện tại âm: %d VND\n", g_so_du);
+        printf("So du hien tai am: %d VND\n", g_so_du);
     }
 }
 
@@ -179,7 +179,7 @@ void tinhLaiSoDu(int so_tien_ns_hien_tai){
 void capNhatSoDu (int delta){
     g_so_du+= delta;
     if (g_so_du < 0)
-    printf ("Số dư hiện tại âm: %d VND\n", g_so_du);
+    printf ("So du hien tai am: %d VND\n", g_so_du);
 }
 
 
@@ -230,39 +230,39 @@ void nhapVaTinhTongThuChi() {
     int tong_thu = 0, tong_chi = 0
     
     // 1. Nhập loại giao dịch cần thống kê
-    printf("Chọn lọai giao dịch (0: Thu, 1: Chi, 2: Tat ca): ");
+    printf("Chon loai giao dich (0: Thu, 1: Chi, 2: Tat ca): ");
     while (scanf("%d", &loai_gd_loc) != 1 || (loai_gd_loc < 0 || loai_gd_loc > 2)) {
-        printf("Lỗi: Vui lòng nhập 0, 1 hoặc 2: ");
+        printf("Loi: Vui long nhap 0, 1 hoac 2: ");
         xoaBuffer();
     }
     xoaBuffer();
 
     // 2. Nhập các tiêu chí lọc thời gian và danh mục
-    printf("Nhập ngày (Nhập -1 để bỏ qua): ");
+    printf("Nhap ngay (Nhap -1 đe bo qua): ");
     scanf("%d", &ngay_loc);
     
-    printf("Nhập tháng (Nhập -1 để bỏ qua): ");
+    printf("Nhap thang (Nhap -1 đe bo qua): ");
     scanf("%d", &thang_loc);
     
-    printf("Nhập năm (Nhập -1 để bỏ qua): ");
+    printf("Nhap nam (Nhap -1 đe bo qua): ");
     scanf("%d", &nam_loc);
     
-    printf("Nhập mã danh mục (Nhập -1 để bỏ qua): ");
+    printf("Nhap ma danh muc (Nhap -1 đe bo qua): ");
     scanf("%d", &ma_dm_loc);
     xoaBuffer();
 
     tinhTongThuChi(loai_gd_loc, ngay_loc, thang_loc, nam_loc, ma_dm_loc, &tong_thu, &tong_chi);
 	
     if (loai_gd_loc == 0 || loai_gd_loc == 2) {
-        printf("Tổng tiền thu: %d VND\n", tong_thu);
+        printf("Tong tien thu: %d VND\n", tong_thu);
     }
     if (loai_gd_loc == 1 || loai_gd_loc == 2) {
-        printf("Tổng tiền chi: %d VND\n", tong_chi);
+        printf("Tong tien chi: %d VND\n", tong_chi);
     }
     
     // Nếu chọn xem cả 2, in thêm dòng chênh lệch (Số dư trong khoảng thời gian đó)
     if (loai_gd_loc == 2) {
-        printf("Chênh lệch (thu - chi): %d VND\n", tong_thu - tong_chi);
+        printf("Chenh lech (thu - chi): %d VND\n", tong_thu - tong_chi);
 }
 
 
