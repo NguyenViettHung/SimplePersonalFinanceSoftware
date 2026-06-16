@@ -9,10 +9,10 @@
 #include "khai_bao.h"
 #include "danh_muc.h"
 #include "giao_dich.h"
-danhMuc *mang_dm_thu = NULL;
-danhMuc *mang_dm_chi = NULL;
-int count_dm_thu = 0;
-int count_dm_chi = 0;
+DanhMuc *mang_dm_thu = NULL;
+DanhMuc *mang_dm_chi = NULL;
+int so_luong_dm_thu = 0;
+int so_luong_dm_chi = 0;
 // Chỉ cho phép kiểu số nguyên
 // Đã gồm cả scanf để nhập
 int nhapSoNguyen() {
@@ -51,21 +51,21 @@ int nhapSoNguyen() {
 }
 int tongHanMuc(){
     int tong=0;
-    for (int i=0; i< count_dm_chi; i++){
+    for (int i=0; i< so_luong_dm_chi; i++){
         tong+=mang_dm_chi[i].han_muc;
     }
     return tong;
 }
 
 void inDanhSachChi() {
-    printf("\n=== DANH SACH DANH MUC CHI (%d) ===\n", count_dm_chi);
-    if (count_dm_chi == 0) {
+    printf("\n=== DANH SACH DANH MUC CHI (%d) ===\n", so_luong_dm_chi);
+    if (so_luong_dm_chi == 0) {
         printf("Danh sach hien dang rong.\n");
         return;
     }
     
     int tong = 0;
-    for (int i = 0; i < count_dm_chi; i++) {
+    for (int i = 0; i < so_luong_dm_chi; i++) {
         printf("Ma: %-3d | Ten: %-10s | Han muc: %d%%\n", 
                mang_dm_chi[i].ma_dm, mang_dm_chi[i].ten_dm, mang_dm_chi[i].han_muc);
         tong += mang_dm_chi[i].han_muc;
@@ -78,13 +78,13 @@ void inDanhSachChi() {
 // Thêm danh mục (mã + tên), han_muc mặc định = 0
 void themDanhMucChi() {
     printf("\n--- THEM DANH MUC CHI ---\n");
-    danhMuc dm_temp;
+    DanhMuc dm_temp;
 
     // Nhập và kiểm tra mã danh mục
     printf("Nhap ma danh muc (so nguyen): ");
     dm_temp.ma_dm = nhapSoNguyen();
 
-    for (int i = 0; i < count_dm_chi; i++) {
+    for (int i = 0; i < so_luong_dm_chi; i++) {
         if (mang_dm_chi[i].ma_dm == dm_temp.ma_dm) {
             printf("Loi: Ma danh muc %d da ton tai!\n", dm_temp.ma_dm);
             return;
@@ -99,9 +99,9 @@ void themDanhMucChi() {
     dm_temp.han_muc = 0;
 
     // Cấp phát mảng động
-    count_dm_chi++;
-    mang_dm_chi = (danhMuc*) realloc(mang_dm_chi, count_dm_chi * sizeof(danhMuc));
-    mang_dm_chi[count_dm_chi - 1] = dm_temp;
+    so_luong_dm_chi++;
+    mang_dm_chi = (DanhMuc*) realloc(mang_dm_chi, so_luong_dm_chi * sizeof(DanhMuc));
+    mang_dm_chi[so_luong_dm_chi - 1] = dm_temp;
 
     printf("\n=> Da them danh muc '%s' (Ma: %d) thanh cong!\n", dm_temp.ten_dm, dm_temp.ma_dm);
     printf("=> Han muc hien tai: 0%% (chua phan bo). Dung chuc nang 5 de phan bo ngan sach.\n");
@@ -109,7 +109,7 @@ void themDanhMucChi() {
 
 // Chia % ngân sách cho một danh mục đã có
 void chiaPhanTramChi() {
-    if (count_dm_chi == 0) {
+    if (so_luong_dm_chi == 0) {
         printf("\nDanh sach danh muc Chi hien dang rong! Them danh muc truoc.\n");
         return;
     }
@@ -132,7 +132,7 @@ void chiaPhanTramChi() {
 
     // Tìm vị trí trong mảng
     int vi_tri = -1;
-    for (int i = 0; i < count_dm_chi; i++) {
+    for (int i = 0; i < so_luong_dm_chi; i++) {
         if (mang_dm_chi[i].ma_dm == ma_can_gan) {
             vi_tri = i;
             break;
@@ -176,7 +176,7 @@ void chiaPhanTramChi() {
 }
 
 void xoaDanhMucChi() {
-    if (count_dm_chi == 0) {
+    if (so_luong_dm_chi == 0) {
         printf("\nDanh sach danh muc Chi hien dang rong!\n");
         return;
     }
@@ -188,7 +188,7 @@ void xoaDanhMucChi() {
 
     // Tìm vị trí cần xóa
     int vi_tri_xoa = -1;
-    for (int i = 0; i < count_dm_chi; i++) {
+    for (int i = 0; i < so_luong_dm_chi; i++) {
         if (mang_dm_chi[i].ma_dm == ma_can_xoa) {
             vi_tri_xoa = i;
             break;
@@ -205,17 +205,17 @@ void xoaDanhMucChi() {
     strcpy(ten_da_xoa, mang_dm_chi[vi_tri_xoa].ten_dm);
 
     // Dồn mảng (O(n))
-    for (int i = vi_tri_xoa; i < count_dm_chi - 1; i++) {
+    for (int i = vi_tri_xoa; i < so_luong_dm_chi - 1; i++) {
         mang_dm_chi[i] = mang_dm_chi[i + 1];
     }
 
     // Cắt bỏ ô nhớ thừa ở cuối mảng
-    count_dm_chi--;
-    if (count_dm_chi == 0) {
+    so_luong_dm_chi--;
+    if (so_luong_dm_chi == 0) {
         free(mang_dm_chi);
         mang_dm_chi = NULL;
     } else {
-        mang_dm_chi = (danhMuc*) realloc(mang_dm_chi, count_dm_chi * sizeof(danhMuc));
+        mang_dm_chi = (DanhMuc*) realloc(mang_dm_chi, so_luong_dm_chi * sizeof(DanhMuc));
     }
 
     // In kết quả
@@ -226,7 +226,7 @@ void xoaDanhMucChi() {
 
 void hoanDoiPhanTramChi() {
     // Kiểm tra điều kiện
-    if (count_dm_chi < 2) {
+    if (so_luong_dm_chi < 2) {
         printf("\nCan co it nhat 2 danh muc Chi de thuc hien hoan doi!\n");
         return;
     }
@@ -246,7 +246,7 @@ void hoanDoiPhanTramChi() {
 
     // Tìm vị trí của 2 danh mục trong mảng
     int vi_tri1 = -1, vi_tri2 = -1;
-    for (int i = 0; i < count_dm_chi; i++) {
+    for (int i = 0; i < so_luong_dm_chi; i++) {
         if (mang_dm_chi[i].ma_dm == ma1) {
             vi_tri1 = i;
         }
@@ -278,7 +278,7 @@ void hoanDoiPhanTramChi() {
            mang_dm_chi[vi_tri2].ten_dm, ma2, cu2, mang_dm_chi[vi_tri2].han_muc);
 }
 void tinhTienDanhMucChi(NganSach ns) {
-    if (count_dm_chi == 0) {
+    if (so_luong_dm_chi == 0) {
         printf("\nDanh sach danh muc Chi hien dang rong!\n");
         return;
     }
@@ -289,10 +289,10 @@ void tinhTienDanhMucChi(NganSach ns) {
 
     int tong_da_phan_bo = 0;
 
-    for (int i = 0; i < count_dm_chi; i++) {
+    for (int i = 0; i < so_luong_dm_chi; i++) {
         int so_tien_dm;
 
-        if (i == count_dm_chi - 1) {
+        if (i == so_luong_dm_chi - 1) {
             // Danh mục cuối: lấy phần còn lại để tránh mất tiền do làm tròn
             so_tien_dm = ns.so_tien_ns - tong_da_phan_bo;
         } else {
@@ -315,12 +315,12 @@ void tinhTienDanhMucChi(NganSach ns) {
 // Tính % tỉ lệ chi của từng danh mục so với tổng đã chi
 // Lọc theo tháng/năm của ngân sách truyền vào (chỉ tính % của 1 tháng nhất định, tháng sau là reset)
 void tinhTiLeChi(NganSach ns) {
-    if (count_dm_chi == 0 || so_luong_chi == 0) {
+    if (so_luong_dm_chi == 0 || so_luong_chi == 0) {
         printf("\nKhong co du lieu de tinh ti le!\n");
         return;
     }
 
-    int *so_tien_dm = (int*) calloc(count_dm_chi, sizeof(int));
+    int *so_tien_dm = (int*) calloc(so_luong_dm_chi, sizeof(int));
     if (so_tien_dm == NULL) {
         printf("\nLoi cap phat bo nho!\n");
         return;
@@ -334,7 +334,7 @@ void tinhTiLeChi(NganSach ns) {
         if (mang_chi[i].nam   != ns.nam)   continue;
 
         // Gom tiền vào đúng vị trí danh mục
-        for (int j = 0; j < count_dm_chi; j++) {
+        for (int j = 0; j < so_luong_dm_chi; j++) {
             if (mang_dm_chi[j].ma_dm == mang_chi[i].ma_dm) {
                 so_tien_dm[j] += mang_chi[i].so_tien_gd;
                 tong_da_chi   += mang_chi[i].so_tien_gd;
@@ -353,7 +353,7 @@ void tinhTiLeChi(NganSach ns) {
     printf("Tong da chi: %d VND\n", tong_da_chi);
     printf("--------------------------------------------------------------\n");
 
-    for (int i = 0; i < count_dm_chi; i++) {
+    for (int i = 0; i < so_luong_dm_chi; i++) {
         float tiLe = (float)so_tien_dm[i] / tong_da_chi * 100.0f;
         printf("ID: %-3d | Ten: %-15s | Da chi: %-10d VND | Ti le: %.2f%%\n",
                mang_dm_chi[i].ma_dm,
