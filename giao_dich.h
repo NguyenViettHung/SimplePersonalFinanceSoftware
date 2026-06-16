@@ -12,8 +12,8 @@
 
 extern GiaoDich* mang_thu;
 extern GiaoDich* mang_chi;
-extern int soLuong_thu;
-extern int soLuong_chi;
+extern int so_luong_thu;
+extern int so_luong_chi;
 extern int suc_chua_thu;
 extern int suc_chua_chi;
 extern int g_so_du;
