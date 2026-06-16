@@ -160,7 +160,7 @@ void capNhatSoDu (int delta){
 // 4. TÍNH TOÁN TỔNG THU/CHI THEO NGÀY, THÁNG, NĂM, LOẠI DANH MỤC
 
 // Tính tổng thu chi
-void tinhtong_thuChi (int loai_gd_loc, int ngay_loc, int thang_loc, int nam_loc, int ma_dm_loc, int *tong_thu, int *tong_chi){
+void tinhTongThuChi (int loai_gd_loc, int ngay_loc, int thang_loc, int nam_loc, int ma_dm_loc, int *tong_thu, int *tong_chi){
     *tong_thu = 0;
     *tong_chi = 0;
 
