@@ -16,12 +16,35 @@ int so_luong_giao_dich_thu = 0;
 int so_luong_giao_dich_chi = 0;
 int suc_chua_thu = 0;
 int suc_chua_chi = 0;
-int g_so_du = 0;   
+int g_so_du = 0;
+extern DanhMuc *mang_dm_thu;
+extern DanhMuc *mang_dm_chi;
+extern int so_luong_dm_chi;
+extern int so_luong_dm_thu;   
 
 void xoaBuffer(void)
 {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
+}
+
+void inDanhSachDanhMuc() {
+    printf("\n=== DANH SACH DANH MUC CHI ===\n");
+    if (so_luong_dm_chi == 0) {
+        printf("Danh sach hien dang rong.\n");
+        return;
+    }
+
+    printf("%-5s | %-15s\n", "Ma", "Ten");
+    printf("------------------------\n");
+
+    for (int i = 0; i < so_luong_dm_chi; i++) {
+        printf("%-5d | %-15s\n",
+               mang_dm_chi[i].ma_dm,
+               mang_dm_chi[i].ten_dm);
+    }
+
+    printf("------------------------\n");
 }
 
 // Hàm hoán vị
@@ -146,7 +169,7 @@ void nhapVaTimKiemGiaoDich() {
     // Chuẩn bị mảng chứa kết quả và gọi hàm lõi
     int mang_ket_qua[1000];
     int so_ket_qua = timKiemGiaoDich(
-        mang_thu, so_luong_thu, 
+        mang_thu, so_luong_giao_dich_thu, 
         ngay_bd, thang_bd, nam_bd, 
         ngay_kt, thang_kt, nam_kt, 
         ma_dm_loc, mang_ket_qua
@@ -356,6 +379,7 @@ struct GiaoDich nhapGiaoDich() {
     xoaBuffer();
     
     // -- 4. NH?P M� DANH M?C --
+    inDanhSachDanhMuc();
     printf("Ma danh muc (> 0): ");
     while (scanf("%d", &gd.ma_dm) != 1 || gd.ma_dm <= 0) {
         printf("Loi: Ma danh muc phai > 0. Nhap lai: ");
@@ -467,7 +491,8 @@ void themGiaoDich(int so_tien_gd,
         g_so_du += so_tien_gd;
     } else {
         g_so_du -= so_tien_gd;
-    }//dang thieu cap nhat han muc
+        truHanMucVaCanhBao(ma_dm, so_tien_gd);
+    }
  
     printf("Them giao dich thanh cong! (Ma GD: %s, Vi tri: %d)\n",
            gd.ma_gd, vi_tri);

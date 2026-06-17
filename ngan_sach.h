@@ -7,7 +7,6 @@ void khoiTaoNganSach(int initial_capacity);
 void docFileNganSach();
 void ghiFileNganSach();
 void giaiPhongNganSach();
-void inDanhSachNganSach();
 NganSach *timNganSach(int thang, int nam);
 void nhapNganSach();
 void kiemTraVaNhapNganSachHienTai();

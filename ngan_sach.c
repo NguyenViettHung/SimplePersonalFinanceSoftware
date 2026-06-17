@@ -4,6 +4,13 @@
 #include <time.h>
 #include "khai_bao.h"
  
+extern GiaoDich* mang_thu;
+extern GiaoDich* mang_chi;
+extern int so_luong_giao_dich_thu;
+extern int so_luong_giao_dich_chi;
+extern int suc_chua_thu;
+extern int suc_chua_chi;
+extern int g_so_du;
 struct NganSach *mang_ngan_sach = NULL;
 int so_luong_ngan_sach = 0;
 int suc_chua_ngan_sach = 0; // mang ngan sach
@@ -24,35 +31,6 @@ void giaiPhongNganSach() {
     so_luong_ngan_sach = 0;
     suc_chua_ngan_sach = 0;
 }
-
-// ============================================
-// Hàm in danh sách ngân sách (kiểm tra)
-// ============================================
-void inDanhSachNganSach() {
-    printf("\n========== DANH SACH NGAN SACH ==========\n");
-    
-    if (so_luong_ngan_sach == 0) {
-        printf("Khong co danh sach ngan sach.\n");
-        printf("=========================================\n\n");
-        return;
-    }
-    
-    printf("%-15s %-20s %-10s %-10s\n",
-           "Ma NS", "So tien (VND)", "Thang", "Nam");
-    printf("%-15s %-20s %-10s %-10s\n",
-           "----------", "-------------------", "-----", "-----");
-    
-    for (int i = 0; i < so_luong_ngan_sach; i++) {
-        printf("%-15s %-20d %-10d %-10d\n",
-               mang_ngan_sach[i].ma_ns,
-               mang_ngan_sach[i].so_tien_ns,
-               mang_ngan_sach[i].thang,
-               mang_ngan_sach[i].nam);
-    }
-    
-    printf("=========================================\n\n");
-}
- 
 
 // =====================================================
 // TIM NGAN SACH THEO THANG/NAM

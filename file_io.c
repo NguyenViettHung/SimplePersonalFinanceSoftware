@@ -36,7 +36,7 @@ void docFileGiaoDich(){
         gd_temp.thang = atoi(strtok(NULL,  ","));
         gd_temp.nam = atoi(strtok(NULL, ","));
         gd_temp.loai_gd = atoi(strtok(NULL, ","));
-        gd_temp.ma_dm, atoi(strtok(NULL, ","));
+        gd_temp.ma_dm = atoi(strtok(NULL, ","));
         strcpy(gd_temp.ma_ns,    strtok(NULL, ","));
         strcpy(gd_temp.ghi_chu,  strtok(NULL, ","));
         if (gd_temp.loai_gd == 0){
@@ -54,10 +54,8 @@ void docFileGiaoDich(){
 
     if (so_luong_giao_dich_thu > 1) insertionSortGiaoDich (mang_thu, so_luong_giao_dich_thu);
     if (so_luong_giao_dich_chi > 1) insertionSortGiaoDich (mang_chi, so_luong_giao_dich_chi);
-    printf("Đã đọc và sắp xếp file giao dịch thành công\n");
 }
 
-// Hàm ghi file
 void ghiFileGiaoDich(){
     FILE *file = fopen("giao_dich.txt", "w");
     if (file == NULL){
@@ -90,7 +88,6 @@ void ghiFileGiaoDich(){
     }     
            
     fclose(file);
-    printf("Đã lưu %d giao dịch thu và %d giao dịch chi\n", so_luong_giao_dich_thu, so_luong_giao_dich_chi);
 }
 
 void ghiFileDanhMuc() {
@@ -262,11 +259,8 @@ void docFileNganSach() {
     }
     
     fclose(file);
-    printf("Da doc file %s thanh cong. Tong %d ngan sach.\n", 
-           ten_file, so_luong_ngan_sach);
 }
  
-
 //Hàm ghi file ngan_sach.txt
 void ghiFileNganSach() {
     char *ten_file = "ngan_sach.txt";
@@ -285,7 +279,6 @@ void ghiFileNganSach() {
     }
     
     fclose(file);
-    printf("Da ghi %d ngan sach vao file %s.\n", so_luong_ngan_sach, ten_file);
 }
 
 

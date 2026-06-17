@@ -44,13 +44,13 @@ void dieuHuong() {
             nhapVaXoaGiaoDich();
             break;
         case 3:
-            
+            nhapVaTimKiemGiaoDich();
             break;
         case 4:
-            
+            nhapVaTinhTongThuChi();
             break;
         case 5:
-            
+            baoCaoVuotHanMuc();
             break;
         case 6:
             

@@ -8,6 +8,8 @@ typedef struct DanhMuc {
     int ma_dm;         // mã danh mục
     char ten_dm[50];   // tên danh mục
     int han_muc;       // hạn mức theo phần trăm
+    int han_muc_tien;
+    int han_muc_tien_goc;
 } DanhMuc;
 
 // 2. Cấu trúc dữ liệu cho ngân sách

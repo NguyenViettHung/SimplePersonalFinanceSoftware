@@ -148,7 +148,7 @@ void chiaPhanTramChi() {
            mang_dm_chi[vi_tri].ten_dm, mang_dm_chi[vi_tri].han_muc);
 
     // Tính lại ngân sách còn lại nếu cộng thêm phần cũ của danh mục này vào
-    // (vì đang ghi đè, không cộng thêm)
+    // vì đang ghi đè, không cộng thêm
     int ngan_sach_kha_dung = phan_tram_con_lai + mang_dm_chi[vi_tri].han_muc;
     printf("Han muc toi da co the dat: %d%%\n", ngan_sach_kha_dung);
 
@@ -366,4 +366,41 @@ void tinhTiLeChi(NganSach ns) {
     printf("=> Tong: %d VND | 100.00%%\n", tong_da_chi);
 
     free(so_tien_dm);
+}
+
+void capNhatHanMucTien(NganSach ns) {
+    for (int i = 0; i < so_luong_dm_chi; i++) {
+        int tien = ns.so_tien_ns * mang_dm_chi[i].han_muc / 100;
+        mang_dm_chi[i].han_muc_tien_goc = tien;
+        mang_dm_chi[i].han_muc_tien     = tien;  // bắt đầu = gốc
+    }
+}
+
+void truHanMucVaCanhBao(int ma_dm, int so_tien) {
+    int vi_tri = -1;
+    for (int i = 0; i < so_luong_dm_chi; i++) {
+        if (mang_dm_chi[i].ma_dm == ma_dm) {
+            vi_tri = i;
+            break;
+        }
+    }
+    if (vi_tri == -1) return;
+
+    mang_dm_chi[vi_tri].han_muc_tien -= so_tien;
+
+    int con_lai = mang_dm_chi[vi_tri].han_muc_tien;
+    int goc     = mang_dm_chi[vi_tri].han_muc_tien_goc;
+
+    if (con_lai <= 0) {
+        printf("\n!!! CANH BAO: '%s' da VUOT HAN MUC!\n",
+               mang_dm_chi[vi_tri].ten_dm);
+        printf("    Han muc goc : %d VND\n", goc);
+        printf("    Vuot        : %d VND\n", -con_lai);
+    } else if (goc > 0 && con_lai <= goc * 20 / 100) {
+        printf("\n!!! CANH BAO: '%s' da su dung >= 80%% han muc!\n",
+               mang_dm_chi[vi_tri].ten_dm);
+        printf("    Han muc goc : %d VND\n", goc);
+        printf("    Con lai     : %d VND (%.1f%%)\n",
+               con_lai, (float)con_lai / goc * 100);
+    }
 }
