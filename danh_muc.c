@@ -313,9 +313,9 @@ void tinhTienDanhMucChi(NganSach ns) {
 }
 
 // Tính % tỉ lệ chi của từng danh mục so với tổng đã chi
-// Lọc theo tháng/năm của ngân sách truyền vào (chỉ tính % của 1 tháng nhất định, tháng sau là reset)
+// Lọc theo tháng/năm của ngân sách truyền vào (tính % của 1 tháng/năm nhất định)
 void tinhTiLeChi(NganSach ns) {
-    if (so_luong_dm_chi == 0 || so_luong_chi == 0) {
+    if (so_luong_dm_chi == 0 || so_luong_giao_dich_chi == 0) {
         printf("\nKhong co du lieu de tinh ti le!\n");
         return;
     }
@@ -328,33 +328,49 @@ void tinhTiLeChi(NganSach ns) {
 
     int tong_da_chi = 0;
 
-    // Duyệt mang_chi
-    for (int i = 0; i < so_luong_chi; i++) {
-        if (mang_chi[i].thang != ns.thang) continue;
-        if (mang_chi[i].nam   != ns.nam)   continue;
+    // Lọc giao dịch chi theo khoảng thời gian (tháng hoặc năm) (vẫn sẽ cập nhật 
+    for (int i = 0; i < so_luong_giao_dich_chi; i++) {
+        if (mang_chi[i].loai_gd != 1) {
+            continue;
+        }
+        if (ns.thang != -1 && mang_chi[i].thang != ns.thang) {
+            continue;
+        }
+        if (ns.nam != -1 && mang_chi[i].nam != ns.nam) {
+            continue;
+        }
 
-        // Gom tiền vào đúng vị trí danh mục
         for (int j = 0; j < so_luong_dm_chi; j++) {
             if (mang_dm_chi[j].ma_dm == mang_chi[i].ma_dm) {
                 so_tien_dm[j] += mang_chi[i].so_tien_gd;
-                tong_da_chi   += mang_chi[i].so_tien_gd;
+                tong_da_chi += mang_chi[i].so_tien_gd;
                 break;
             }
         }
     }
 
     if (tong_da_chi == 0) {
-        printf("\nChua co giao dich Chi nao trong thang %d/%d!\n", ns.thang, ns.nam);
+        if (ns.thang != -1) {
+            printf("\nChua co giao dich Chi nao trong thang %d/%d!\n", ns.thang, ns.nam);
+        } else {
+            printf("\nChua co giao dich Chi nao trong nam %d!\n", ns.nam);
+        }
         free(so_tien_dm);
         return;
     }
 
-    printf("\n=== TI LE CHI GIUA CAC DANH MUC [%d/%d] ===\n", ns.thang, ns.nam);
+    if (ns.thang != -1) {
+        printf("\n=== TI LE CHI GIUA CAC DANH MUC [%d/%d] ===\n", ns.thang, ns.nam);
+    } else {
+        printf("\n=== TI LE CHI GIUA CAC DANH MUC [%d] ===\n", ns.nam);
+    }
     printf("Tong da chi: %d VND\n", tong_da_chi);
     printf("--------------------------------------------------------------\n");
 
     for (int i = 0; i < so_luong_dm_chi; i++) {
-        float tiLe = (float)so_tien_dm[i] / tong_da_chi * 100.0f;
+        double tiLe = tong_da_chi > 0
+            ? (double)so_tien_dm[i] / tong_da_chi * 100.0
+            : 0.0;    //Trường hợp tổng đã chi = 0
         printf("ID: %-3d | Ten: %-15s | Da chi: %-10d VND | Ti le: %.2f%%\n",
                mang_dm_chi[i].ma_dm,
                mang_dm_chi[i].ten_dm,
