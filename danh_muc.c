@@ -57,6 +57,25 @@ int tongHanMuc(){
     return tong;
 }
 
+void inTenDanhMuc() {
+    printf("\n=== DANH SACH DANH MUC CHI ===\n");
+    if (so_luong_dm_chi == 0) {
+        printf("Danh sach hien dang rong.\n");
+        return;
+    }
+
+    printf("%-5s | %-15s\n", "Ma", "Ten");
+    printf("------------------------\n");
+
+    for (int i = 0; i < so_luong_dm_chi; i++) {
+        printf("%-5d | %-15s\n",
+               mang_dm_chi[i].ma_dm,
+               mang_dm_chi[i].ten_dm);
+    }
+
+    printf("------------------------\n");
+}
+
 void inDanhSachChi() {
     printf("\n=== DANH SACH DANH MUC CHI (%d) ===\n", so_luong_dm_chi);
     if (so_luong_dm_chi == 0) {

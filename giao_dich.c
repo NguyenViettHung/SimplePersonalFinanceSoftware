@@ -9,6 +9,7 @@
 
 #include "khai_bao.h" 
 #include "giao_dich.h"
+#include "danh_muc.h"
 
 struct GiaoDich* mang_thu = NULL;
 struct GiaoDich* mang_chi = NULL;
@@ -16,35 +17,12 @@ int so_luong_giao_dich_thu = 0;
 int so_luong_giao_dich_chi = 0;
 int suc_chua_thu = 0;
 int suc_chua_chi = 0;
-int g_so_du = 0;
-extern DanhMuc *mang_dm_thu;
-extern DanhMuc *mang_dm_chi;
-extern int so_luong_dm_chi;
-extern int so_luong_dm_thu;   
+int g_so_du = 0;  
 
 void xoaBuffer(void)
 {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
-}
-
-void inDanhSachDanhMuc() {
-    printf("\n=== DANH SACH DANH MUC CHI ===\n");
-    if (so_luong_dm_chi == 0) {
-        printf("Danh sach hien dang rong.\n");
-        return;
-    }
-
-    printf("%-5s | %-15s\n", "Ma", "Ten");
-    printf("------------------------\n");
-
-    for (int i = 0; i < so_luong_dm_chi; i++) {
-        printf("%-5d | %-15s\n",
-               mang_dm_chi[i].ma_dm,
-               mang_dm_chi[i].ten_dm);
-    }
-
-    printf("------------------------\n");
 }
 
 // Hàm hoán vị
