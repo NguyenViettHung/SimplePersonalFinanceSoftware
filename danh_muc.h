@@ -11,7 +11,8 @@ extern int so_luong_dm_chi;
 // Chỉ cho phép nhập số nguyên, từ chối chữ/ký tự đặc biệt
 int nhapSoNguyen();
 int tongHanMuc();
-void inTenDanhMuc();
+void inTenDanhMucChi();
+void inTenDanhMucThu();
 void inDanhSachChi();
 void themDanhMucChi();
 void chiaPhanTramChi();

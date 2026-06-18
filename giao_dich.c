@@ -357,7 +357,8 @@ struct GiaoDich nhapGiaoDich() {
     xoaBuffer();
     
     // -- 4. NH?P M� DANH M?C --
-    inTenDanhMuc();
+    if (gd.loai_gd == 1) inTenDanhMucChi();
+    if (gd.loai_gd == 0) inTenDanhMucThu();
     printf("Ma danh muc (> 0): ");
     while (scanf("%d", &gd.ma_dm) != 1 || gd.ma_dm <= 0) {
         printf("Loi: Ma danh muc phai > 0. Nhap lai: ");
