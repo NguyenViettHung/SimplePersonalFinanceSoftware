@@ -422,7 +422,57 @@ void tinhTiLeChi(NganSach ns) {
 
     free(so_tien_dm);
 }
+// Làm theo case 6 trong menu
+void nhapVaTinhTiLeChi() {
+    NganSach ns;
+    int lua_chon;
 
+    printf("\n--- TINH TI LE CHI GIUA CAC DANH MUC ---\n");
+    printf("Chon khoang thoi gian:\n");
+    printf("  1. Theo thang\n");
+    printf("  2. Theo nam\n");
+    while (1) {
+        lua_chon = nhapSoNguyen();
+        if (lua_chon == 1 || lua_chon == 2) {
+            break;
+        }
+        printf("Loi: Vui long nhap 1 hoac 2: ");
+    }
+
+if (lua_chon == 1) {
+        printf("Thang (1-12): ");
+        while (1) {
+            ns.thang = nhapSoNguyen();
+            if (ns.thang >= 1 && ns.thang <= 12) {
+                break;
+            }
+            printf("Loi: Thang phai trong khoang 1-12. Nhap lai: ");
+        }
+    } else {
+        ns.thang = -1; // Đánh dấu là không lọc theo tháng
+    }
+
+    // Xử lý nhập năm
+    printf("Nam (>= 1900): ");
+    while (1) {
+        ns.nam = nhapSoNguyen();
+        if (ns.nam >= 1900) {
+            break;
+        }
+        printf("Loi: Nam phai >= 1900. Nhap lai: ");
+    }
+
+    // Dựng ma_ns và so_tien_ns (không dùng trong tinhTiLeChi nhưng cần khởi tạo)
+    if (ns.thang != -1) {
+        snprintf(ns.ma_ns, sizeof(ns.ma_ns), "NS%04d%02d", ns.nam, ns.thang);
+    } else {
+        snprintf(ns.ma_ns, sizeof(ns.ma_ns), "NS%04d", ns.nam);
+    }
+    ns.so_tien_ns = 0;
+
+    // Gọi hàm tính toán
+    tinhTiLeChi(ns);
+}
 void capNhatHanMucTien(NganSach ns) {
     for (int i = 0; i < so_luong_dm_chi; i++) {
         int tien = ns.so_tien_ns * mang_dm_chi[i].han_muc / 100;
