@@ -12,8 +12,8 @@ extern DanhMuc *mang_dm_thu;
 extern DanhMuc *mang_dm_chi;
 extern int so_luong_giao_dich_thu;
 extern int so_luong_giao_dich_chi;
-extern int count_dm_chi;
-extern int count_dm_thu;
+extern int so_luong_dm_chi;
+extern int so_luong_dm_thu;
 extern int so_luong_ngan_sach;
 extern int suc_chua_ngan_sach;
 // Hàm đọc file
@@ -98,7 +98,7 @@ void ghiFileDanhMuc() {
     }
 
     // Ghi mảng danh mục thu (số 0 ở đầu)
-    for (int i = 0; i < count_dm_thu; i++) {
+    for (int i = 0; i < so_luong_dm_thu; i++) {
         fprintf(file, "0,%d,%s,%d\n", 
                 mang_dm_thu[i].ma_dm, 
                 mang_dm_thu[i].ten_dm, 
@@ -106,7 +106,7 @@ void ghiFileDanhMuc() {
     }
 
     // Ghi mảng danh mục chi (số 1 ở đầu)
-    for (int i = 0; i < count_dm_chi; i++) {
+    for (int i = 0; i < so_luong_dm_chi; i++) {
         fprintf(file, "1,%d,%s,%d\n", 
                 mang_dm_chi[i].ma_dm, 
                 mang_dm_chi[i].ten_dm, 
@@ -114,7 +114,7 @@ void ghiFileDanhMuc() {
     }
 
     fclose(file);
-    printf("\n=> Da luu thanh cong %d danh muc Thu va %d danh muc Chi vao file!\n", count_dm_thu, count_dm_chi);
+    printf("\n=> Da luu thanh cong %d danh muc Thu va %d danh muc Chi vao file!\n", so_luong_dm_thu, so_luong_dm_chi);
 }
 
 void docFileDanhMuc() {
@@ -161,19 +161,19 @@ void docFileDanhMuc() {
 
         // Đưa dữ liệu vào đúng mảng dựa trên cờ phân loại
         if (loai_dm == 0) {
-            count_dm_thu++;
-            mang_dm_thu = (DanhMuc*) realloc(mang_dm_thu, count_dm_thu * sizeof(DanhMuc));
-            mang_dm_thu[count_dm_thu - 1] = dmTemp;
+            so_luong_dm_thu++;
+            mang_dm_thu = (DanhMuc*) realloc(mang_dm_thu, so_luong_dm_thu * sizeof(DanhMuc));
+            mang_dm_thu[so_luong_dm_thu - 1] = dmTemp;
         } 
         else if (loai_dm == 1) {
-            count_dm_chi++;
-            mang_dm_chi = (DanhMuc*) realloc(mang_dm_chi, count_dm_chi * sizeof(DanhMuc));
-            mang_dm_chi[count_dm_chi - 1] = dmTemp;
+            so_luong_dm_chi++;
+            mang_dm_chi = (DanhMuc*) realloc(mang_dm_chi, so_luong_dm_chi * sizeof(DanhMuc));
+            mang_dm_chi[so_luong_dm_chi - 1] = dmTemp;
         }
     }
 
     fclose(file);
-    printf("=> Da tai du lieu thanh cong: %d Thu | %d Chi.\n", count_dm_thu, count_dm_chi);
+    printf("=> Da tai du lieu thanh cong: %d Thu | %d Chi.\n", so_luong_dm_thu, so_luong_dm_chi);
 }
 
 //Hàm đọc file ngan_sach.txt

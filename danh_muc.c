@@ -13,6 +13,7 @@ DanhMuc *mang_dm_thu = NULL;
 DanhMuc *mang_dm_chi = NULL;
 int so_luong_dm_thu = 0;
 int so_luong_dm_chi = 0;
+extern int so_luong_giao_dich_chi;
 // Chỉ cho phép kiểu số nguyên
 // Đã gồm cả scanf để nhập
 int nhapSoNguyen() {
