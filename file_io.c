@@ -20,7 +20,7 @@ extern int suc_chua_ngan_sach;
 void docFileGiaoDich(){
     FILE *file = fopen ("giao_dich.txt", "r");
     if (file == NULL){
-        printf ("Chua co file 'giao_dich.txt'. He thong se tao moi khi ban luu du lieu.\n");
+        printf ("Chua co file giao dich, se tao moi khi ghi.\n");
         return;
     }
 
@@ -59,32 +59,33 @@ void docFileGiaoDich(){
 void ghiFileGiaoDich(){
     FILE *file = fopen("giao_dich.txt", "w");
     if (file == NULL){
-        printf ("Lỗi mở file ghi đè\n");
+        printf ("Loi mo file ghi đe\n");
         return;
     }
 
     // Ghi mảng thu
     for (int i = 0; i < so_luong_giao_dich_thu; i++){
-        fprintf(file, "%s, %d, %d, %d, %d, %d, %d, %s, %s\n",
+        fprintf(file, "%s, %d, %d, %d, %d, %d, %s, %d, %s\n",
                 mang_thu[i].ma_gd, 
                 mang_thu[i].so_tien_gd,
                 mang_thu[i].ngay, mang_thu[i].thang, mang_thu[i].nam,
                 mang_thu[i].loai_gd,
-                mang_thu[i].ma_dm,
+                mang_thu[i].ghi_chu,
                 mang_thu[i].ma_ns,
+                mang_thu[i].ma_dm,
                 mang_thu[i].ghi_chu); 
     }
 
     // Ghi mảng chi
     for (int i = 0; i < so_luong_giao_dich_chi; i++){
-        fprintf(file, "%s, %d, %d, %d, %d, %d, %d, %s, %s\n",
+        fprintf(file, "%s, %d, %d, %d, %d, %d, %s, %d, %s\n",
                 mang_chi[i].ma_gd, 
                 mang_chi[i].so_tien_gd,
                 mang_chi[i].ngay, mang_chi[i].thang, mang_chi[i].nam,
                 mang_chi[i].loai_gd,
-                mang_chi[i].ma_dm,
                 mang_chi[i].ma_ns,
-                mang_chi[i].ghi_chu);
+                mang_chi[i].ma_dm,
+                mang_thu[i].ghi_chu);
     }     
            
     fclose(file);
@@ -93,7 +94,7 @@ void ghiFileGiaoDich(){
 void ghiFileDanhMuc() {
     FILE *file = fopen("danh_muc.txt", "w");
     if (file == NULL) {
-        printf("\nKhong the tao hoac mo file 'danh_muc.txt' de ghi du lieu!\n");
+        printf("\n[LỖI] Khong the tao hoac mo file 'danh_muc.txt' de ghi du lieu!\n");
         return;
     }
 
@@ -114,13 +115,14 @@ void ghiFileDanhMuc() {
     }
 
     fclose(file);
+    printf("\n=> Da luu thanh cong %d danh muc Thu va %d danh muc Chi vao file!\n", so_luong_dm_thu, so_luong_dm_chi);
 }
 
 void docFileDanhMuc() {
     FILE *file = fopen("danh_muc.txt", "r");
     if (file == NULL) {
         // Nếu file chưa tồn tại
-        printf("Chua co file 'danh_muc.txt'. He thong se tao moi khi ban luu du lieu.\n");
+        printf("=> Chua co file 'danh_muc.txt'. He thong se tao moi khi ban luu du lieu.\n");
         return;
     }
 
@@ -172,6 +174,7 @@ void docFileDanhMuc() {
     }
 
     fclose(file);
+    printf("=> Da tai du lieu thanh cong: %d Thu | %d Chi.\n", so_luong_dm_thu, so_luong_dm_chi);
 }
 
 //Hàm đọc file ngan_sach.txt
