@@ -53,7 +53,7 @@ void dieuHuong() {
             baoCaoVuotHanMuc();
             break;
         case 6:
-            
+            nhapVaTinhTiLeChi();
             break;
         case 0:
             flag = 0;

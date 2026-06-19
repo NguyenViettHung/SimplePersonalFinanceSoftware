@@ -480,7 +480,8 @@ void capNhatHanMucTien(NganSach ns) {
     for (int i = 0; i < so_luong_dm_chi; i++) {
         if (i == so_luong_dm_chi - 1) {
             mang_dm_chi[i].han_muc_tien_goc = ns.so_tien_ns - tong_phan_bo;
-            mang_dm_chi[i].han_muc_tien     = ns.so_tien_ns - tong_phan_bo;
+            mang_dm_chi[i].han_muc_tien = ns.so_tien_ns - tong_phan_bo;
+            break;
         }
         int tien = ns.so_tien_ns * mang_dm_chi[i].han_muc / 100;
         tong_phan_bo += tien;
