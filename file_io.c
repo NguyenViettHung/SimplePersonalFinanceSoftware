@@ -70,9 +70,9 @@ void ghiFileGiaoDich(){
                 mang_thu[i].so_tien_gd,
                 mang_thu[i].ngay, mang_thu[i].thang, mang_thu[i].nam,
                 mang_thu[i].loai_gd,
-                mang_thu[i].ghi_chu,
+                mang_thu[i].ma_dm,
                 mang_thu[i].ma_ns,
-                mang_thu[i].ma_dm); 
+                mang_thu[i].ghi_chu); 
     }
 
     // Ghi mảng chi
@@ -82,9 +82,9 @@ void ghiFileGiaoDich(){
                 mang_chi[i].so_tien_gd,
                 mang_chi[i].ngay, mang_chi[i].thang, mang_chi[i].nam,
                 mang_chi[i].loai_gd,
-                mang_chi[i].ghi_chu,
+                mang_chi[i].ma_dm,
                 mang_chi[i].ma_ns,
-                mang_chi[i].ma_dm);
+                mang_chi[i].ghi_chu);
     }     
            
     fclose(file);
