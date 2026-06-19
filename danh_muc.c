@@ -316,6 +316,7 @@ void hoanDoiPhanTramChi() {
     printf(" Danh muc '%s' (Ma: %d): %d%% -> %d%%\n", 
            mang_dm_chi[vi_tri2].ten_dm, ma2, cu2, mang_dm_chi[vi_tri2].han_muc);
 }
+
 void tinhTienDanhMucChi(NganSach ns) {
     if (so_luong_dm_chi == 0) {
         printf("\nDanh sach danh muc Chi hien dang rong!\n");
@@ -473,9 +474,16 @@ if (lua_chon == 1) {
     // Gọi hàm tính toán
     tinhTiLeChi(ns);
 }
+
 void capNhatHanMucTien(NganSach ns) {
+    int tong_phan_bo = 0;
     for (int i = 0; i < so_luong_dm_chi; i++) {
+        if (i == so_luong_dm_chi - 1) {
+            mang_dm_chi[i].han_muc_tien_goc = ns.so_tien_ns - tong_phan_bo;
+            mang_dm_chi[i].han_muc_tien     = ns.so_tien_ns - tong_phan_bo;
+        }
         int tien = ns.so_tien_ns * mang_dm_chi[i].han_muc / 100;
+        tong_phan_bo += tien;
         mang_dm_chi[i].han_muc_tien_goc = tien;
         mang_dm_chi[i].han_muc_tien     = tien;  // bắt đầu = gốc
     }
