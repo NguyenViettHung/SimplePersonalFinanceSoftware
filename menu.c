@@ -5,6 +5,7 @@
 #include "ngan_sach.h"
 #include "bao_cao.h"
 #include "danh_muc.h"
+#include <stdio.h>
 
 void inMenu() {
     printf("\n");
@@ -17,6 +18,9 @@ void inMenu() {
     printf("  4. Tinh tong thu/chi theo ngay/thang/nam/loai danh muc\n");
     printf("  5. Bao cao cac khoan vuot qua han muc chi\n");
     printf("  6. Tinh ti le chi tieu giua cac danh muc\n");
+    printf("  7. Xem danh sach danh muc\n");
+    printf("  8. Them danh muc\n");
+    printf("  9. Xoa danh muc\n");
     printf("  0. Thoat\n");
     printf("========================================\n");
     printf("Lua chon: ");
@@ -53,9 +57,18 @@ void dieuHuong() {
             baoCaoVuotHanMuc();
             break;
         case 6:
-            nhapVaTinhTiLeChi();
+            
             break;
-        case 0:
+        case 7:
+            xemDanhSachDanhMuc();
+            break;
+        case 8:
+            themDanhMuc();
+            break;
+        case 9:
+            xoaDanhMuc();
+            break;
+        case 10:
             flag = 0;
             break;
         default:
