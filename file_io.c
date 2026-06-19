@@ -65,7 +65,7 @@ void ghiFileGiaoDich(){
 
     // Ghi mảng thu
     for (int i = 0; i < so_luong_giao_dich_thu; i++){
-        fprintf(file, "%s, %d, %d, %d, %d, %d, %s, %s, %d\n",
+        fprintf(file, "%s, %d, %d, %d, %d, %d, %d, %s, %s\n",
                 mang_thu[i].ma_gd, 
                 mang_thu[i].so_tien_gd,
                 mang_thu[i].ngay, mang_thu[i].thang, mang_thu[i].nam,
@@ -77,7 +77,7 @@ void ghiFileGiaoDich(){
 
     // Ghi mảng chi
     for (int i = 0; i < so_luong_giao_dich_chi; i++){
-        fprintf(file, "%s, %d, %d, %d, %d, %d, %s, %s, %d\n",
+        fprintf(file, "%s, %d, %d, %d, %d, %d, %d, %s, %s\n",
                 mang_chi[i].ma_gd, 
                 mang_chi[i].so_tien_gd,
                 mang_chi[i].ngay, mang_chi[i].thang, mang_chi[i].nam,
