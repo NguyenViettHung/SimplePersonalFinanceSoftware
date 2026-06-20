@@ -21,7 +21,7 @@ void inMenu() {
     printf("  7. Xem danh sach danh muc\n");
     printf("  8. Them danh muc\n");
     printf("  9. Xoa danh muc\n");
-    printf("  0. Thoat\n");
+    printf("  10. Thoat\n");
     printf("========================================\n");
     printf("Lua chon: ");
 }
@@ -57,7 +57,7 @@ void dieuHuong() {
             baoCaoVuotHanMuc();
             break;
         case 6:
-            
+            nhapVaTinhTiLeChi();
             break;
         case 7:
             xemDanhSachDanhMuc();
@@ -72,7 +72,7 @@ void dieuHuong() {
             flag = 0;
             break;
         default:
-            printf("[LOI] Lua chon khong hop le. Vui long chon lai (0-6).\n");
+            printf("[LOI] Lua chon khong hop le. Vui long chon lai (1-10).\n");
             break;
         }
     }
