@@ -18,6 +18,7 @@ void xoaDanhMuc();
 void hoanDoiPhanTramChi();
 void tinhTienDanhMucChi(NganSach ns);
 void tinhTiLeChi(NganSach ns);
+void nhapVaTinhTiLeChi();
 void capNhatHanMucTien(NganSach ns);
 void truHanMucVaCanhBao(int ma_dm, int so_tien);
 
