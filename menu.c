@@ -29,6 +29,7 @@ void inMenu() {
 void dieuHuong() {
     int flag = 1;
     int luaChon;
+    kiemTraVaNhapNganSachHienTai();
     /* --- Vong lap chinh --- */
     while (flag) {
         inMenu();
@@ -68,7 +69,7 @@ void dieuHuong() {
         case 9:
             xoaDanhMuc();
             break;
-        case 10:
+        case 0:
             flag = 0;
             break;
         default:
