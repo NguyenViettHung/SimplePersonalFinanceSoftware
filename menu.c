@@ -21,7 +21,7 @@ void inMenu() {
     printf("  7. Xem danh sach danh muc\n");
     printf("  8. Them danh muc\n");
     printf("  9. Xoa danh muc\n");
-    printf("  10. Thoat\n");
+    printf("  0. Thoat\n");
     printf("========================================\n");
     printf("Lua chon: ");
 }
