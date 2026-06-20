@@ -28,9 +28,9 @@ typedef struct GiaoDich {
     int thang;         // tháng giao dịch
     int nam;           // năm giao dịch
     int loai_gd;       // loại giao dịch: 0 - thu, 1 - chi
-    char ghi_chu[100]; // ghi chú
+    int ma_dm;         // mã danh mục (FK)
     char ma_ns[15];    // mã ngân sách (FK)
-    int ma_dm;         // mã danh mục (FK) 
+    char ghi_chu[100]; // ghi chú
 } GiaoDich;
 
 #endif /* KHAI_BAO_H */
