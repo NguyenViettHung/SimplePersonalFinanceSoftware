@@ -164,7 +164,7 @@ void nhapVaTimKiemGiaoDich() {
     int ngay_kt, thang_kt, nam_kt;
     int ma_dm_loc;
 
-    printf("Nhap ngay/thang/nam bat đau: ");
+    printf("Nhap ngay/thang/nam bat dau: ");
     scanf("%d%d%d", &ngay_bd, &thang_bd, &nam_bd);
     
     printf("Nhap ngay/thang/nam ket thuc: ");
