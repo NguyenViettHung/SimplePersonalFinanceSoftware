@@ -167,7 +167,7 @@ void nhapVaTimKiemGiaoDich() {
     printf("Nhap ngay/thang/nam bat đau: ");
     scanf("%d%d%d", &ngay_bd, &thang_bd, &nam_bd);
     
-    printf("Nhập ngày/tháng/năm kết thúc: ");
+    printf("Nhap ngay/thang/nam ket thuc: ");
     scanf("%d%d%d", &ngay_kt, &thang_kt, &nam_kt);
     
     printf("Nhap ma danh muc can loc (Nhap -1 đe bo qua): ");
