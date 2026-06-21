@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "khai_bao.h"
 #include "danh_muc.h"
@@ -16,6 +17,10 @@ DanhMuc *mang_dm_thu = NULL;
 DanhMuc *mang_dm_chi = NULL;
 int so_luong_dm_thu = 0;
 int so_luong_dm_chi = 0;
+extern struct NganSach *mang_ngan_sach;
+extern int so_luong_ngan_sach;
+extern int suc_chua_ngan_sach;
+
 // Chỉ cho phép kiểu số nguyên
 // Đã gồm cả scanf để nhập
 int nhapSoNguyen() {
@@ -484,14 +489,6 @@ void nhapVaTinhTiLeChi() {
     tinhTiLeChi(ns);
 }
 
-void capNhatHanMucTien(NganSach ns) {
-    for (int i = 0; i < so_luong_dm_chi; i++) {
-        int tien = ns.so_tien_ns * mang_dm_chi[i].han_muc / 100;
-        mang_dm_chi[i].han_muc_tien_goc = tien;
-        mang_dm_chi[i].han_muc_tien     = tien;  // bắt đầu = gốc
-    }
-}
-
 void truHanMucVaCanhBao(int ma_dm, int so_tien) {
     int vi_tri = -1;
     for (int i = 0; i < so_luong_dm_chi; i++) {
@@ -521,7 +518,6 @@ void truHanMucVaCanhBao(int ma_dm, int so_tien) {
     }
 }
 
-
 void xoaDanhMuc() {
     printf("\n--- XOA DANH MUC ---\n");
     int loai_dm;
@@ -543,6 +539,21 @@ void xoaDanhMuc() {
         return;
     }
 
+        // -- HIEN THI DANH SACH DANH MUC TUONG UNG --
+    printf("\n--- DANH SACH DANH MUC %s ---\n", (loai_dm == 0) ? "THU" : "CHI");
+    printf("%-5s | %-15s\n", "Ma", "Ten");
+    printf("------------------------\n");
+    if (loai_dm == 0) {
+        for (int i = 0; i < so_luong_dm_thu; i++) {
+            printf("%-5d | %-15s\n", mang_dm_thu[i].ma_dm, mang_dm_thu[i].ten_dm);
+        }
+    } else {
+        for (int i = 0; i < so_luong_dm_chi; i++) {
+            printf("%-5d | %-15s\n", mang_dm_chi[i].ma_dm, mang_dm_chi[i].ten_dm);
+        }
+    }
+    printf("------------------------\n");
+    
     int ma_xoa;
     printf("Nhap ma danh muc can xoa (Hoac 0 de huy): ");
     while (scanf("%d", &ma_xoa) != 1) {
@@ -586,5 +597,48 @@ void xoaDanhMuc() {
             so_luong_dm_chi--;
             printf("=> Da xoa thanh cong danh muc CHI ma '%d'!\n", ma_xoa);
         }
+    }
+}
+
+static int laySoTienNS(int thang, int nam) {
+    for (int i = 0; i < so_luong_ngan_sach; i++) {
+        if (mang_ngan_sach[i].thang == thang &&
+            mang_ngan_sach[i].nam   == nam)
+            return mang_ngan_sach[i].so_tien_ns;
+    }
+    return 0;
+}
+ 
+//tong tien da chi cho 1 danh muc trong thang/nam
+
+static int tinhTongDaChi(int ma_dm, int thang, int nam) {
+    int tong = 0;
+    for (int i = 0; i < so_luong_giao_dich_chi; i++) {
+        struct GiaoDich *gd = &mang_chi[i];
+        if (gd->ma_dm == ma_dm && gd->thang == thang && gd->nam == nam)
+            tong += gd->so_tien_gd;
+    }
+    return tong;
+}
+ 
+void capNhatHanMucTien() {
+    // 1. Lay thang/nam hien tai
+    time_t now = time(NULL);
+    struct tm *t = localtime(&now);
+    int thang_ht = t->tm_mon + 1;
+    int nam_ht   = t->tm_year + 1900;
+ 
+    // 2. Lay so tien ngan sach thang nay
+    int so_tien_ns = laySoTienNS(thang_ht, nam_ht);
+    // 3. Tinh han_muc_tien_goc va han_muc_tien cho tung danh muc
+    for (int i = 0; i < so_luong_dm_chi; i++) {
+        DanhMuc *dm = &mang_dm_chi[i];
+ 
+        // Goc: tinh tu % va ngan sach, khong doi trong thang
+        dm->han_muc_tien_goc = so_tien_ns * dm->han_muc / 100;
+ 
+        // Con lai: tru di nhung gi da chi trong thang nay
+        int tong_da_chi  = tinhTongDaChi(dm->ma_dm, thang_ht, nam_ht);
+        dm->han_muc_tien = dm->han_muc_tien_goc - tong_da_chi;
     }
 }

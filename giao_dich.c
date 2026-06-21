@@ -342,6 +342,7 @@ void nhapVaThemGiaoDich() {
                  gd.loai_gd,
                  gd.ghi_chu,
                  gd.ma_dm);
+    capNhatHanMucTien();
 }
 
 struct GiaoDich nhapGiaoDich() {

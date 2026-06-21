@@ -4,6 +4,7 @@
 #include "khai_bao.h"
 #include "file_io.h"
 #include "giao_dich.h"
+#include "danh_muc.h"
 
 extern struct GiaoDich* mang_thu;
 extern struct GiaoDich* mang_chi;
@@ -226,10 +227,14 @@ void docFileDanhMuc() {
             for (int i = 0; i < so_luong_dm_thu; i++) {
                 if (mang_dm_thu[i].ma_dm == dmTemp.ma_dm) { bi_trung = 1; break; }
             }
+            dmTemp.han_muc_tien = -1;
+            dmTemp.han_muc_tien_goc = -1;
         } else if (loai_dm == 1) {
             for (int i = 0; i < so_luong_dm_chi; i++) {
                 if (mang_dm_chi[i].ma_dm == dmTemp.ma_dm) { bi_trung = 1; break; }
             }
+            dmTemp.han_muc_tien = 0;
+            dmTemp.han_muc_tien_goc = 0;
         }
         
         if (bi_trung) {
@@ -273,7 +278,6 @@ void docFileDanhMuc() {
     printf("=> Da tai du lieu tu file (Da tu dong loc loi va don dep data khong hop le).\n");
 }
 
-//Hàm đọc file ngan_sach.txt
 void docFileNganSach() {
     char *ten_file = "ngan_sach.txt";
     FILE *file = fopen(ten_file, "r");
@@ -358,7 +362,6 @@ void docFileNganSach() {
     fclose(file);
 }
  
-//Hàm ghi file ngan_sach.txt
 void ghiFileNganSach() {
     char *ten_file = "ngan_sach.txt";
     FILE *file = fopen(ten_file, "w");
@@ -380,9 +383,10 @@ void ghiFileNganSach() {
 
 
 void napDuLieu() {
-    docFileGiaoDich();
-    docFileDanhMuc();
     docFileNganSach();
+    docFileDanhMuc();
+    docFileGiaoDich();
+    capNhatHanMucTien();
 }
 
 void luuDuLieu() {
