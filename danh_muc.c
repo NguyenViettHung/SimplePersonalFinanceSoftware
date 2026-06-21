@@ -69,21 +69,12 @@ void themDanhMuc() {
     int loai_dm;
     printf("Chon loai danh muc (0 - Thu, 1 - Chi, hoac 2 de huy): ");
     while (1) {
-        if (scanf("%d", &loai_dm) != 1) {
-            printf("Loi: Vui long nhap so. Nhap lai (0/1/2): ");
-            xoaBuffer();
-            continue;
-        }
-        xoaBuffer();
-        
-        if (loai_dm == 2) {
-            printf("\n=> Da huy thao tac them danh muc. Quay lai Menu!\n");
+        loai_dm= nhapSoNguyen();
+        if (loai_dm == 2)
             return;
-        }
-        if (loai_dm == 0 || loai_dm == 1) {
-            break; // Hợp lệ thì thoát vòng lặp đi tiếp
-        }
-        printf("Loi: Chi duoc nhap 0, 1 hoac 2. Nhap lai: ");
+        if (loai_dm == 0 || loai_dm == 1)
+            break;
+        else printf("Vui long chon 0/1/2");
     }
     
     // Nhập và kiểm tra mã danh mục
@@ -91,17 +82,11 @@ void themDanhMuc() {
     printf("\nNhap ma danh muc moi (Hoac nhap 0 de huy): ");
     
     while (1) {
-        if (scanf("%d", &ma_moi) != 1) {
-            printf("Loi: Vui long nhap mot so nguyen. Nhap lai (Hoac 0 de huy): ");
-            xoaBuffer();
-            continue;
-        }
-        xoaBuffer();
-
+        ma_moi= nhapSoNguyen();
         // ---- XU LY LENH HUY ----
         if (ma_moi == 0) {
             printf("\n=> Da huy thao tac them danh muc. Quay lai Menu!\n");
-            return; // Thoat luon khoi ham themDanhMucChi
+            return; // Thoat luon khoi ham
         }
 
         if (ma_moi < 0) {
@@ -157,7 +142,7 @@ void themDanhMuc() {
         mang_dm_chi = (DanhMuc*) realloc(mang_dm_chi, so_luong_dm_chi * sizeof(DanhMuc));
         mang_dm_chi[so_luong_dm_chi - 1] = dm_temp;
         printf("\n=> Da them danh muc CHI '%s' (Ma: %d) thanh cong!\n", dm_temp.ten_dm, dm_temp.ma_dm);
-        printf("=> Han muc hien tai: 0%% (chua phan bo). Dung chuc nang 5 de phan bo ngan sach.\n");
+        printf("=> Han muc hien tai: 0%% (chua phan bo). Dung chuc nang 4 de phan bo ngan sach.\n");
     }
 }
 
