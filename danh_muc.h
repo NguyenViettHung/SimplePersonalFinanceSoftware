@@ -15,7 +15,7 @@ void xemDanhSachDanhMuc();
 void themDanhMuc();
 void chiaPhanTramChi();
 void xoaDanhMuc();
-void hoanDoiPhanTramChi();
+void hoanDoiHanMucChi();
 void tinhTienDanhMucChi(NganSach ns);
 void tinhTiLeChi(NganSach ns);
 void nhapVaTinhTiLeChi();
