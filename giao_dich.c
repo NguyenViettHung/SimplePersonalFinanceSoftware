@@ -48,13 +48,6 @@ void inDanhSachDanhMuc() {
     printf("------------------------\n");
 }
 
-// Hàm hoán vị
-void hoanVi (struct GiaoDich* a, struct GiaoDich* b){
-    struct GiaoDich temp = *a;
-    *a = *b;
-    *b = temp;
-}
-
 
 // 1. SẮP XẾP GIAO DỊCH
 // Mảng số lượng coi như đã sắp xếp tốt (tăng dần theo ngày)
