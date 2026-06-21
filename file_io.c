@@ -93,7 +93,7 @@ char *token = strtok(line, ",");
             continue;
         }
         // 4. Kiểm tra ngày/tháng/năm hợp lệ
-        if (gd_temp.nam < 1900 || gd_temp.thang < 1 || gd_temp.thang > 12) {
+        if (gd_temp.nam < 1900 || gd_temp.thang < 1 || gd_temp.thang > 12 || gd_temp.ngay < 1 || gd_temp.ngay >31) {
             printf("[Canh bao Giao dich '%s': Thang/Nam (%d/%d) khong hop le. Da bo qua!\n", gd_temp.ma_gd, gd_temp.thang, gd_temp.nam);
             continue;
         }
