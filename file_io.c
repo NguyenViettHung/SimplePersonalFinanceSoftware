@@ -88,11 +88,11 @@ char *token = strtok(line, ",");
             printf("Canh bao Giao dich '%s': Loai giao dich (%d) sai. Da bo qua!\n", gd_temp.ma_gd, gd_temp.loai_gd);
             continue;
         }
-
         if (ton_tai_dm == 0) {
             printf("Canh bao Giao dich '%s': Ma danh muc '%d' KHONG TON TAI trong he thong. Da bo qua!\n", gd_temp.ma_gd, gd_temp.ma_dm);
             continue;
         }
+        // 4. Kiểm tra ngày/tháng/năm hợp lệ
         if (gd_temp.nam < 1900 || gd_temp.thang < 1 || gd_temp.thang > 12) {
             printf("[Canh bao Giao dich '%s': Thang/Nam (%d/%d) khong hop le. Da bo qua!\n", gd_temp.ma_gd, gd_temp.thang, gd_temp.nam);
             continue;
