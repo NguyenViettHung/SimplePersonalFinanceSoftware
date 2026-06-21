@@ -157,34 +157,121 @@ void nhapVaTimKiemGiaoDich() {
     int ngay_kt, thang_kt, nam_kt;
     int ma_dm_loc;
 
-    printf("Nhap ngay/thang/nam bat dau: ");
-    scanf("%d%d%d", &ngay_bd, &thang_bd, &nam_bd);
-    
-    printf("Nhap ngay/thang/nam ket thuc: ");
-    scanf("%d%d%d", &ngay_kt, &thang_kt, &nam_kt);
-    
-    printf("Nhap ma danh muc can loc (Nhap -1 de bo qua): ");
-    scanf("%d", &ma_dm_loc);
-    xoaBuffer();
+    // Nhập ngày bắt đầu
+    printf("Nhap ngay bat dau (1-31, nhap -1 de bo qua): ");
+    while (1) {
+        ngay_bd = nhapSoNguyen();
+        if (ngay_bd == -1 || (ngay_bd >= 1 && ngay_bd <= 31)) break;
+        printf("Loi: Ngay phai tu 1-31 hoac -1. Nhap lai: ");
+    }
+
+    // Nhập tháng bắt đầu
+    printf("Nhap thang bat dau (1-12, nhap -1 de bo qua): ");
+    while (1) {
+        thang_bd = nhapSoNguyen();
+        if (thang_bd == -1 || (thang_bd >= 1 && thang_bd <= 12)) break;
+        printf("Loi: Thang phai tu 1-12 hoac -1. Nhap lai: ");
+    }
+
+    // Nhập năm bắt đầu
+    printf("Nhap nam bat dau (>=1900, nhap -1 de bo qua): ");
+    while (1) {
+        nam_bd = nhapSoNguyen();
+        if (nam_bd == -1 || nam_bd >= 1900) break;
+        printf("Loi: Nam phai >= 1900 hoac -1. Nhap lai: ");
+    }
+
+    // Nhập ngày kết thúc
+    printf("Nhap ngay ket thuc (1-31, nhap -1 de bo qua): ");
+    while (1) {
+        ngay_kt = nhapSoNguyen();
+        if (ngay_kt == -1 || (ngay_kt >= 1 && ngay_kt <= 31)) break;
+        printf("Loi: Ngay phai tu 1-31 hoac -1. Nhap lai: ");
+    }
+
+    // Nhập tháng kết thúc
+    printf("Nhap thang ket thuc (1-12, nhap -1 de bo qua): ");
+    while (1) {
+        thang_kt = nhapSoNguyen();
+        if (thang_kt == -1 || (thang_kt >= 1 && thang_kt <= 12)) break;
+        printf("Loi: Thang phai tu 1-12 hoac -1. Nhap lai: ");
+    }
+
+    // Nhập năm kết thúc
+    printf("Nhap nam ket thuc (>=1900, nhap -1 de bo qua): ");
+    while (1) {
+        nam_kt = nhapSoNguyen();
+        if (nam_kt == -1 || nam_kt >= 1900) break;
+        printf("Loi: Nam phai >= 1900 hoac -1. Nhap lai: ");
+    }
+
+    // Nhập mã danh mục
+    printf("Nhap ma danh muc can loc (nhap -1 de bo qua): ");
+    while (1) {
+        ma_dm_loc = nhapSoNguyen();
+        if (ma_dm_loc == -1 || ma_dm_loc >= 0) break;
+        printf("Loi: Ma danh muc phai >= 0 hoac -1. Nhap lai: ");
+    }
+
+    // Cấp phát động mảng kết quả cho thu
+    int *mang_ket_qua_thu = NULL;
+    int so_ket_qua_thu = 0;
+    if (so_luong_giao_dich_thu > 0) {
+        mang_ket_qua_thu = (int*)malloc(so_luong_giao_dich_thu * sizeof(int));
+        if (mang_ket_qua_thu == NULL) {
+            printf("Loi: Khong the cap phat bo nho cho tim kiem thu.\n");
+            return;
+        }
+    }
 
     // Tìm kiếm trên mảng thu
-    int mang_ket_qua_thu[1000];
-    int so_ket_qua_thu = timKiemGiaoDich(mang_thu, so_luong_giao_dich_thu, 
-        ngay_bd, thang_bd, nam_bd, 
-        ngay_kt, thang_kt, nam_kt, 
-        ma_dm_loc, mang_ket_qua_thu
-    );
-    printf("Ket qua giao dich thu");
-    inKetQuaTimKiem(mang_thu, mang_ket_qua_thu, so_ket_qua_thu);
+    if (so_luong_giao_dich_thu > 0) {
+        so_ket_qua_thu = timKiemGiaoDich(
+            mang_thu, so_luong_giao_dich_thu,
+            ngay_bd, thang_bd, nam_bd,
+            ngay_kt, thang_kt, nam_kt,
+            ma_dm_loc, mang_ket_qua_thu
+        );
+    }
+
+    // Cấp phát động mảng kết quả cho chi
+    int *mang_ket_qua_chi = NULL;
+    int so_ket_qua_chi = 0;
+    if (so_luong_giao_dich_chi > 0) {
+        mang_ket_qua_chi = (int*)malloc(so_luong_giao_dich_chi * sizeof(int));
+        if (mang_ket_qua_chi == NULL) {
+            printf("Loi: Khong the cap phat bo nho cho tim kiem chi.\n");
+            free(mang_ket_qua_thu); // dọn dẹp trước khi thoát
+            return;
+        }
+    }
 
     // Tìm kiếm trên mảng chi
-    int mang_ket_qua_chi[1000];
-    int so_ket_qua_chi = timKiemGiaoDich( mang_chi, so_luong_giao_dich_chi, ngay_bd, thang_bd, nam_bd, 
-        ngay_kt, thang_kt, nam_kt, 
-        ma_dm_loc, mang_ket_qua_chi
-    );
-    printf("Ket qua giao dich chi");
-    inKetQuaTimKiem(mang_chi, mang_ket_qua_chi, so_ket_qua_chi);
+    if (so_luong_giao_dich_chi > 0) {
+        so_ket_qua_chi = timKiemGiaoDich(
+            mang_chi, so_luong_giao_dich_chi,
+            ngay_bd, thang_bd, nam_bd,
+            ngay_kt, thang_kt, nam_kt,
+            ma_dm_loc, mang_ket_qua_chi
+        );
+    }
+
+    // In kết quả
+    printf("\n--- KET QUA TIM KIEM (THU) ---\n");
+    if (so_luong_giao_dich_thu > 0 && mang_ket_qua_thu != NULL)
+        inKetQuaTimKiem(mang_thu, mang_ket_qua_thu, so_ket_qua_thu);
+    else
+        printf("Khong co giao dich thu nao.\n");
+
+    printf("\n--- KET QUA TIM KIEM (CHI) ---\n");
+    if (so_luong_giao_dich_chi > 0 && mang_ket_qua_chi != NULL)
+        inKetQuaTimKiem(mang_chi, mang_ket_qua_chi, so_ket_qua_chi);
+    else
+        printf("Khong co giao dich chi nao.\n");
+
+    // Giải phóng bộ nhớ
+    free(mang_ket_qua_thu);
+    free(mang_ket_qua_chi);
 }
 
 
