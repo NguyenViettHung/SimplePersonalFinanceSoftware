@@ -140,7 +140,7 @@ return so_ket_qua;
 // In kết quả ra màn hình
 void inKetQuaTimKiem (struct GiaoDich mang[], int mang_ket_qua[], int so_ket_qua){
     if (so_ket_qua == 0){
-        printf("Khong tim thay giao dich phu hop voi tieu chi đa chon.\n");
+        printf("Khong tim thay giao dich phu hop voi tieu chi da chon.\n");
         return;
     }
     printf("\n%-10s %-12s %-15s %-12s %s\n", "Ma giao dich", "Ngay", "So tien", "Danh muc", "Ghi chu");
@@ -163,7 +163,7 @@ void nhapVaTimKiemGiaoDich() {
     printf("Nhap ngay/thang/nam ket thuc: ");
     scanf("%d%d%d", &ngay_kt, &thang_kt, &nam_kt);
     
-    printf("Nhap ma danh muc can loc (Nhap -1 đe bo qua): ");
+    printf("Nhap ma danh muc can loc (Nhap -1 de bo qua): ");
     scanf("%d", &ma_dm_loc);
     xoaBuffer();
 
@@ -271,16 +271,16 @@ void nhapVaTinhTongThuChi() {
     xoaBuffer();
 
     // 2. Nhập các tiêu chí lọc thời gian và danh mục
-    printf("Nhap ngay (Nhap -1 đe bo qua): ");
+    printf("Nhap ngay (Nhap -1 de bo qua): ");
     scanf("%d", &ngay_loc);
     
-    printf("Nhap thang (Nhap -1 đe bo qua): ");
+    printf("Nhap thang (Nhap -1 de bo qua): ");
     scanf("%d", &thang_loc);
     
-    printf("Nhap nam (Nhap -1 đe bo qua): ");
+    printf("Nhap nam (Nhap -1 de bo qua): ");
     scanf("%d", &nam_loc);
     
-    printf("Nhap ma danh muc (Nhap -1 đe bo qua): ");
+    printf("Nhap ma danh muc (Nhap -1 de bo qua): ");
     scanf("%d", &ma_dm_loc);
     xoaBuffer();
 
