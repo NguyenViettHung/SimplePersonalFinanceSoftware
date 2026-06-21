@@ -17,32 +17,88 @@ extern int so_luong_dm_thu;
 extern int so_luong_ngan_sach;
 extern int suc_chua_ngan_sach;
 // Hàm đọc file
-void docFileGiaoDich(){
-    FILE *file = fopen ("giao_dich.txt", "r");
-    if (file == NULL){
-        printf ("Chua co file giao dich, se tao moi khi ghi.\n");
+void docFileGiaoDich() {
+    FILE *file = fopen("giao_dich.txt", "r");
+    if (file == NULL) {
+        printf("=> Chua co file 'giao_dich.txt'. He thong se tao moi khi ban luu du lieu.\n");
         return;
     }
 
     char line[1000];
-    while (fgets (line, sizeof(line), file)){ 
+    
+    // Reset bộ đếm trước khi đọc để tránh lỗi khi nạp lại dữ liệu nhiều lần
+    so_luong_giao_dich_thu = 0;
+    so_luong_giao_dich_chi = 0;
+
+    while (fgets(line, sizeof(line), file)) { 
         struct GiaoDich gd_temp;
         line[strcspn(line, "\n")] = 0;
-        char *token = strtok(line, ",");
+        if (strlen(line) == 0) continue;
+
+char *token = strtok(line, ",");
         if (token == NULL) continue;
         strcpy(gd_temp.ma_gd, token);
-        gd_temp.so_tien_gd= atoi(strtok(NULL,  ","));
-        gd_temp.ngay = atoi(strtok(NULL,  ",")); 
-        gd_temp.thang = atoi(strtok(NULL,  ","));
-        gd_temp.nam = atoi(strtok(NULL, ","));
-        gd_temp.loai_gd = atoi(strtok(NULL, ","));
-        gd_temp.ma_dm = atoi(strtok(NULL, ","));
-        strcpy(gd_temp.ma_ns,    strtok(NULL, ","));
-        strcpy(gd_temp.ghi_chu,  strtok(NULL, ","));
+        
+        token = strtok(NULL, ","); if (token) gd_temp.so_tien_gd = atoi(token);
+        token = strtok(NULL, ","); if (token) gd_temp.ngay       = atoi(token); 
+        token = strtok(NULL, ","); if (token) gd_temp.thang      = atoi(token);
+        token = strtok(NULL, ","); if (token) gd_temp.nam        = atoi(token);
+        token = strtok(NULL, ","); if (token) gd_temp.loai_gd    = atoi(token);
+        token = strtok(NULL, ","); if (token) gd_temp.ma_dm      = atoi(token);
+        
+        // KIỂM TRA NULL TRƯỚC KHI STRCPY CHO CHUỖI
+        token = strtok(NULL, ",");
+        if (token != NULL) {
+            strcpy(gd_temp.ma_ns, token);
+        } else {
+            strcpy(gd_temp.ma_ns, ""); // Nếu rỗng thì gán chuỗi rỗng
+        }
+
+        token = strtok(NULL, ",");
+        if (token != NULL) {
+            strcpy(gd_temp.ghi_chu, token);
+        } else {
+            strcpy(gd_temp.ghi_chu, ""); // Nếu ghi chú rỗng thì gán chuỗi rỗng để không bị Crash
+        }
+        //     BẮT ĐẦU BỘ LỌC
+        // 1. Chặn số tiền âm hoặc bằng 0
+        if (gd_temp.so_tien_gd <= 0) {
+            printf("[CANH BAO FILE] Giao dich '%s': So tien (%d) khong hop le. Da bo qua!\n", gd_temp.ma_gd, gd_temp.so_tien_gd);
+            continue;
+        }
+
+        // 2. Chặn mã danh mục dị thường (<= 0)
+        if (gd_temp.ma_dm <= 0) {
+            printf("[CANH BAO FILE] Giao dich '%s': Ma danh muc (%d) khong hop le. Da bo qua!\n", gd_temp.ma_gd, gd_temp.ma_dm);
+            continue;
+        }
+
+        // 3. Chặn mã danh mục KHÔNG CÓ THỰC (ví dụ mã 9999)
+        int ton_tai_dm = 0;
+        if (gd_temp.loai_gd == 0) {
+            for (int i = 0; i < so_luong_dm_thu; i++) {
+                if (mang_dm_thu[i].ma_dm == gd_temp.ma_dm) { ton_tai_dm = 1; break; }
+            }
+        } else if (gd_temp.loai_gd == 1) {
+            for (int i = 0; i < so_luong_dm_chi; i++) {
+                if (mang_dm_chi[i].ma_dm == gd_temp.ma_dm) { ton_tai_dm = 1; break; }
+            }
+        } else {
+            printf("[CANH BAO FILE] Giao dich '%s': Loai giao dich (%d) sai. Da bo qua!\n", gd_temp.ma_gd, gd_temp.loai_gd);
+            continue;
+        }
+
+        if (ton_tai_dm == 0) {
+            printf("[CANH BAO FILE] Giao dich '%s': Ma danh muc '%d' KHONG TON TAI trong he thong. Da bo qua!\n", gd_temp.ma_gd, gd_temp.ma_dm);
+            continue;
+        }
+
+        // KẾT THÚC KIỂM DUYỆT
+        // Đưa dữ liệu sạch vào mảng
         if (gd_temp.loai_gd == 0){
             so_luong_giao_dich_thu++;
             mang_thu = (struct GiaoDich*) realloc(mang_thu, so_luong_giao_dich_thu * sizeof(struct GiaoDich));
-            mang_thu[so_luong_giao_dich_thu - 1] =gd_temp;
+            mang_thu[so_luong_giao_dich_thu - 1] = gd_temp;
         }
         else if (gd_temp.loai_gd == 1){
             so_luong_giao_dich_chi++;
@@ -52,8 +108,12 @@ void docFileGiaoDich(){
     }
     fclose(file);
 
-    if (so_luong_giao_dich_thu > 1) insertionSortGiaoDich (mang_thu, so_luong_giao_dich_thu);
-    if (so_luong_giao_dich_chi > 1) insertionSortGiaoDich (mang_chi, so_luong_giao_dich_chi);
+    // Sắp xếp lại giao dịch theo thời gian nếu cần
+    if (so_luong_giao_dich_thu > 1) insertionSortGiaoDich(mang_thu, so_luong_giao_dich_thu);
+    if (so_luong_giao_dich_chi > 1) insertionSortGiaoDich(mang_chi, so_luong_giao_dich_chi);
+    
+    printf("=> Da tai du lieu Giao Dich (Da don dep giao dich loi).\n");
+    printf("Doc duoc file giao dich");
 }
 
 void ghiFileGiaoDich(){
