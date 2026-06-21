@@ -8,7 +8,6 @@
 #include "ngan_sach.h"
 #include "bao_cao.h"
 #include "danh_muc.h"
-#include "menu.h"
 
 extern struct GiaoDich* mang_thu;
 extern struct GiaoDich* mang_chi;
@@ -23,7 +22,7 @@ int main() {
     napDuLieu();
 	dieuHuong();
 	luuDuLieu();
-
+	giaiPhongBoNho();
 	return 0;
 }
 

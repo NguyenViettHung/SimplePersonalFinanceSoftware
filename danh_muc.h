@@ -11,10 +11,10 @@ extern int so_luong_dm_chi;
 // Chỉ cho phép nhập số nguyên, từ chối chữ/ký tự đặc biệt
 int nhapSoNguyen();
 int tongHanMuc();
-void inDanhSachChi();
-void themDanhMucChi();
+void xemDanhSachDanhMuc();
+void themDanhMuc();
 void chiaPhanTramChi();
-void xoaDanhMucChi();  // Xóa theo ma_dm
+void xoaDanhMuc();
 void hoanDoiPhanTramChi();
 void tinhTienDanhMucChi(NganSach ns);
 void tinhTiLeChi(NganSach ns);

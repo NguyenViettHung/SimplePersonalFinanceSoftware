@@ -1,0 +1,11 @@
+# Các tệp thực thi
+*.exe
+
+# Các tệp dữ liệu tạm của Office
+~$*
+
+# Các tệp dữ liệu thật (nếu bạn không muốn Git quản lý dữ liệu người dùng)
+*.txt
+
+# Cấu hình VS Code
+.vscode/
