@@ -64,13 +64,13 @@ char *token = strtok(line, ",");
         //     BẮT ĐẦU BỘ LỌC
         // 1. Chặn số tiền âm hoặc bằng 0
         if (gd_temp.so_tien_gd <= 0) {
-            printf("[CANH BAO FILE] Giao dich '%s': So tien (%d) khong hop le. Da bo qua!\n", gd_temp.ma_gd, gd_temp.so_tien_gd);
+            printf("Canh bao Giao dich '%s': So tien (%d) khong hop le. Da bo qua!\n", gd_temp.ma_gd, gd_temp.so_tien_gd);
             continue;
         }
 
         // 2. Chặn mã danh mục dị thường (<= 0)
         if (gd_temp.ma_dm <= 0) {
-            printf("[CANH BAO FILE] Giao dich '%s': Ma danh muc (%d) khong hop le. Da bo qua!\n", gd_temp.ma_gd, gd_temp.ma_dm);
+            printf("Canh bao Giao dich '%s': Ma danh muc (%d) khong hop le. Da bo qua!\n", gd_temp.ma_gd, gd_temp.ma_dm);
             continue;
         }
 
@@ -85,15 +85,18 @@ char *token = strtok(line, ",");
                 if (mang_dm_chi[i].ma_dm == gd_temp.ma_dm) { ton_tai_dm = 1; break; }
             }
         } else {
-            printf("[CANH BAO FILE] Giao dich '%s': Loai giao dich (%d) sai. Da bo qua!\n", gd_temp.ma_gd, gd_temp.loai_gd);
+            printf("Canh bao Giao dich '%s': Loai giao dich (%d) sai. Da bo qua!\n", gd_temp.ma_gd, gd_temp.loai_gd);
             continue;
         }
 
         if (ton_tai_dm == 0) {
-            printf("[CANH BAO FILE] Giao dich '%s': Ma danh muc '%d' KHONG TON TAI trong he thong. Da bo qua!\n", gd_temp.ma_gd, gd_temp.ma_dm);
+            printf("Canh bao Giao dich '%s': Ma danh muc '%d' KHONG TON TAI trong he thong. Da bo qua!\n", gd_temp.ma_gd, gd_temp.ma_dm);
             continue;
         }
-
+        if (gd_temp.nam < 1900 || gd_temp.thang < 1 || gd_temp.thang > 12) {
+            printf("[Canh bao Giao dich '%s': Thang/Nam (%d/%d) khong hop le. Da bo qua!\n", gd_temp.ma_gd, gd_temp.thang, gd_temp.nam);
+            continue;
+        }
         // KẾT THÚC KIỂM DUYỆT
         // Đưa dữ liệu sạch vào mảng
         if (gd_temp.loai_gd == 0){
@@ -113,8 +116,7 @@ char *token = strtok(line, ",");
     if (so_luong_giao_dich_thu > 1) insertionSortGiaoDich(mang_thu, so_luong_giao_dich_thu);
     if (so_luong_giao_dich_chi > 1) insertionSortGiaoDich(mang_chi, so_luong_giao_dich_chi);
     
-    printf("=> Da tai du lieu Giao Dich (Da don dep giao dich loi).\n");
-    printf("Doc duoc file giao dich");
+    printf("=> Da tai du lieu giao dich (Da don dep giao dich loi).\n");
 }
 
 void ghiFileGiaoDich(){
@@ -214,10 +216,10 @@ void docFileDanhMuc() {
         if (token == NULL) continue;
         dmTemp.han_muc = atoi(token);
 
-        // BẮT ĐẦU BỘ LỌC KIỂM DUYỆT (DATA VALIDATION)
+        // BẮT ĐẦU BỘ LỌC KIỂM DUYỆT
         // Chặn Mã âm hoặc Mã = 0
         if (dmTemp.ma_dm <= 0) {
-            printf("[CANH BAO FILE] Ma '%d' (Ten: %s) khong hop le. Da bo qua!\n", dmTemp.ma_dm, dmTemp.ten_dm);
+            printf("Canh bao Ma '%d' (Ten: %s) khong hop le. Da bo qua!\n", dmTemp.ma_dm, dmTemp.ten_dm);
             continue; // Hủy bỏ, không nạp dòng này vào mảng
         }
 
@@ -238,13 +240,13 @@ void docFileDanhMuc() {
         }
         
         if (bi_trung) {
-            printf("[CANH BAO FILE] Phat hien trung ma '%d' (Ten: %s). Da bo qua dong bi trung!\n", dmTemp.ma_dm, dmTemp.ten_dm);
+            printf("Canh bao Phat hien trung ma '%d' (Ten: %s). Da bo qua dong bi trung!\n", dmTemp.ma_dm, dmTemp.ten_dm);
             continue;
         }
 
         // Chặn % hạn mức dị thường (< 0% hoặc > 100%)
         if (dmTemp.han_muc < 0 || dmTemp.han_muc > 100) {
-            printf("[CANH BAO FILE] Han muc %d%% cua ma '%d' khong hop le. Tu dong dat ve 0%%!\n", dmTemp.han_muc, dmTemp.ma_dm);
+            printf("Canh bao Han muc %d%% cua ma '%d' khong hop le. Tu dong dat ve 0%%!\n", dmTemp.han_muc, dmTemp.ma_dm);
             dmTemp.han_muc = 0; 
             // Giữ lại danh mục nhưng tước bỏ % dị thường
         }
@@ -253,7 +255,7 @@ void docFileDanhMuc() {
         if (loai_dm == 1) {
             if (tong_han_muc_chi + dmTemp.han_muc > 100) {
                 int han_muc_cho_phep = 100 - tong_han_muc_chi;
-                printf("[CANH BAO FILE] Ma '%d' lam tong ngan sach vuot 100%%. Ep han muc tu %d%% xuong %d%%!\n", 
+                printf("Canh bao Ma '%d' lam tong ngan sach vuot 100%%. Ep han muc tu %d%% xuong %d%%!\n", 
                        dmTemp.ma_dm, dmTemp.han_muc, han_muc_cho_phep);
                 dmTemp.han_muc = han_muc_cho_phep;
             }
@@ -275,7 +277,7 @@ void docFileDanhMuc() {
     }
 
     fclose(file);
-    printf("=> Da tai du lieu tu file (Da tu dong loc loi va don dep data khong hop le).\n");
+    printf("=> Da tai du lieu danh muc (Da don dep danh muc loi).\n");
 }
 
 void docFileNganSach() {
@@ -358,7 +360,7 @@ void docFileNganSach() {
         mang_ngan_sach[so_luong_ngan_sach] = ns_tam;
         so_luong_ngan_sach++;
     }
-    
+    printf("=> Da tai du lieu ngan sach (Da don dep ngan sach loi).\n");
     fclose(file);
 }
  
@@ -390,7 +392,7 @@ void napDuLieu() {
 }
 
 void luuDuLieu() {
-    ghiFileGiaoDich();
     ghiFileDanhMuc();
+    ghiFileGiaoDich();
     ghiFileNganSach();
 }
