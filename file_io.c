@@ -120,46 +120,83 @@ void ghiFileDanhMuc() {
 void docFileDanhMuc() {
     FILE *file = fopen("danh_muc.txt", "r");
     if (file == NULL) {
-        // Nếu file chưa tồn tại
         printf("=> Chua co file 'danh_muc.txt'. He thong se tao moi khi ban luu du lieu.\n");
         return;
     }
 
     char line[200];
+    int tong_han_muc_chi = 0; // Biến theo dõi tổng % để chặn việc vượt quá 100%
     
-    // Đọc từng dòng cho đến khi hết file
+    // Reset số lượng trước khi đọc (Phòng trường hợp gọi hàm nạp dữ liệu nhiều lần)
+    so_luong_dm_thu = 0;
+    so_luong_dm_chi = 0;
+
     while (fgets(line, sizeof(line), file)) {
         DanhMuc dmTemp;
         
-        // Xóa ký tự xuống dòng '\n' ở cuối chuỗi nếu có
         line[strcspn(line, "\n")] = 0; 
-        
-        // Bỏ qua các dòng trống
         if (strlen(line) == 0) continue;
 
-        // Tách chuỗi bằng dấu phẩy
         char *token = strtok(line, ",");
         if (token == NULL) continue;
-        
-        // Lấy thông tin cờ phân loại (0 = Thu, 1 = Chi)
         int loai_dm = atoi(token);
 
-        // Lấy Mã danh mục
         token = strtok(NULL, ",");
         if (token == NULL) continue;
         dmTemp.ma_dm = atoi(token);
 
-        // Lấy Tên danh mục
         token = strtok(NULL, ",");
         if (token == NULL) continue;
         strcpy(dmTemp.ten_dm, token);
 
-        // Lấy Hạn mức %
         token = strtok(NULL, ",");
         if (token == NULL) continue;
         dmTemp.han_muc = atoi(token);
 
-        // Đưa dữ liệu vào đúng mảng dựa trên cờ phân loại
+        // BẮT ĐẦU BỘ LỌC KIỂM DUYỆT (DATA VALIDATION)
+        // Chặn Mã âm hoặc Mã = 0
+        if (dmTemp.ma_dm <= 0) {
+            printf("[CANH BAO FILE] Ma '%d' (Ten: %s) khong hop le. Da bo qua!\n", dmTemp.ma_dm, dmTemp.ten_dm);
+            continue; // Hủy bỏ, không nạp dòng này vào mảng
+        }
+
+        // Chặn trùng Mã (Duplicate ID)
+        int bi_trung = 0;
+        if (loai_dm == 0) {
+            for (int i = 0; i < so_luong_dm_thu; i++) {
+                if (mang_dm_thu[i].ma_dm == dmTemp.ma_dm) { bi_trung = 1; break; }
+            }
+        } else if (loai_dm == 1) {
+            for (int i = 0; i < so_luong_dm_chi; i++) {
+                if (mang_dm_chi[i].ma_dm == dmTemp.ma_dm) { bi_trung = 1; break; }
+            }
+        }
+        
+        if (bi_trung) {
+            printf("[CANH BAO FILE] Phat hien trung ma '%d' (Ten: %s). Da bo qua dong bi trung!\n", dmTemp.ma_dm, dmTemp.ten_dm);
+            continue;
+        }
+
+        // Chặn % hạn mức dị thường (< 0% hoặc > 100%)
+        if (dmTemp.han_muc < 0 || dmTemp.han_muc > 100) {
+            printf("[CANH BAO FILE] Han muc %d%% cua ma '%d' khong hop le. Tu dong dat ve 0%%!\n", dmTemp.han_muc, dmTemp.ma_dm);
+            dmTemp.han_muc = 0; 
+            // Giữ lại danh mục nhưng tước bỏ % dị thường
+        }
+
+        // Chặn tổng % tất cả các danh mục Chi vượt 100%
+        if (loai_dm == 1) {
+            if (tong_han_muc_chi + dmTemp.han_muc > 100) {
+                int han_muc_cho_phep = 100 - tong_han_muc_chi;
+                printf("[CANH BAO FILE] Ma '%d' lam tong ngan sach vuot 100%%. Ep han muc tu %d%% xuong %d%%!\n", 
+                       dmTemp.ma_dm, dmTemp.han_muc, han_muc_cho_phep);
+                dmTemp.han_muc = han_muc_cho_phep;
+            }
+            tong_han_muc_chi += dmTemp.han_muc; // Cộng dồn phần trăm hiện tại
+        }
+
+        // KẾT THÚC KIỂM DUYỆT
+        // Đưa dữ liệu sạch vào mảng
         if (loai_dm == 0) {
             so_luong_dm_thu++;
             mang_dm_thu = (DanhMuc*) realloc(mang_dm_thu, so_luong_dm_thu * sizeof(DanhMuc));
@@ -173,7 +210,7 @@ void docFileDanhMuc() {
     }
 
     fclose(file);
-    printf("=> Da tai du lieu thanh cong: %d Thu | %d Chi.\n", so_luong_dm_thu, so_luong_dm_chi);
+    printf("=> Da tai du lieu tu file (Da tu dong loc loi va don dep data khong hop le).\n");
 }
 
 //Hàm đọc file ngan_sach.txt
