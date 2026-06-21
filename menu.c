@@ -122,7 +122,7 @@ void dieuHuong() {
                 flag = 0;
                 break;
             default:
-                printf("[LOI] Lua chon khong hop le. Vui long chon tu 0-4.\n");
+                printf("[LOI] Lua chon khong hop le. Vui long chon tu 0-3.\n");
                 break;
         }
     }
