@@ -170,7 +170,7 @@ void chiaPhanTramChi() {
 
     // Hiển thị danh sách để người dùng chọn
     printf("\n=== DANH SACH DANH MUC CHI ===\n");
-    printf("%-5s | %-15s | %-5s\n", "Ma", "Ten", "Han muc (%)");
+    printf("%-5s | %-15s | %-5s\n", "Ma", "Ten", "Han muc (%%)");
     printf("----------------------------------\n");
     for (int i = 0; i < so_luong_dm_chi; i++) {
         printf("%-5d | %-15s | %d%%\n", mang_dm_chi[i].ma_dm, mang_dm_chi[i].ten_dm, mang_dm_chi[i].han_muc);
@@ -275,7 +275,7 @@ void xemDanhSachDanhMuc() {
         if (so_luong_dm_chi == 0) {
             printf("Danh sach chi hien dang rong.\n");
         } else {
-            printf("%-5s | %-15s | %-5s\n", "Ma", "Ten", "Han muc (%)");
+            printf("%-5s | %-15s | %-5s\n", "Ma", "Ten", "Han muc (%%)");
             printf("----------------------------------\n");
             for (int i = 0; i < so_luong_dm_chi; i++) {
                 printf("%-5d | %-15s | %d%%\n", mang_dm_chi[i].ma_dm, mang_dm_chi[i].ten_dm, mang_dm_chi[i].han_muc);
@@ -285,19 +285,17 @@ void xemDanhSachDanhMuc() {
     }
 }
 
-void hoanDoiPhanTramChi() {
+void hoanDoiHanMucChi() {
     // Kiểm tra điều kiện
     if (so_luong_dm_chi < 2) {
         printf("\nCan co it nhat 2 danh muc Chi de thuc hien hoan doi!\n");
         return;
     }
-
-    int ma1, ma2;
-    printf("\n--- HOAN DOI %% DANH MUC CHI ---\n");
     printf("Nhap ma danh muc thu nhat: ");
-    scanf("%d", &ma1);
+    int ma1 = nhapSoNguyen();
+    
     printf("Nhap ma danh muc thu hai: ");
-    scanf("%d", &ma2);
+    int ma2 = nhapSoNguyen();
 
     // 2 mã giống nhau
     if (ma1 == ma2) {
@@ -305,6 +303,11 @@ void hoanDoiPhanTramChi() {
         return;
     }
 
+    // 2 mã giống nhau
+    if (ma1 == ma2) {
+        printf("\nHai ma danh muc phai khac nhau!\n");
+        return;
+    }
     // Tìm vị trí của 2 danh mục trong mảng
     int vi_tri1 = -1, vi_tri2 = -1;
     for (int i = 0; i < so_luong_dm_chi; i++) {
