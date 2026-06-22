@@ -66,6 +66,7 @@ void menuBaoCao() {
         printf("  1. Tinh tong thu/chi theo thoi gian/danh muc\n");
         printf("  2. Bao cao cac khoan vuot qua han muc chi\n");
         printf("  3. Tinh ti le chi tieu giua cac danh muc\n");
+        printf("  4. Xem ngan sach hien tai va ngan sach cho cac danh muc\n");
         printf("  0. Quay lai Menu Chinh\n");
         printf("Lua chon: ");
         
@@ -76,6 +77,7 @@ void menuBaoCao() {
             case 1: nhapVaTinhTongThuChi(); break;
             case 2: baoCaoVuotHanMuc(); break;
             case 3: nhapVaTinhTiLeChi(); break;
+            case 4: xemNganSachHienTai(); break;
             case 0: return;
             default: printf("[LOI] Lua chon khong hop le.\n"); break;
         }
