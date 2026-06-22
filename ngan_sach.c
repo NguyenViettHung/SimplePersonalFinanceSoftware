@@ -3,6 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include "khai_bao.h"
+#include "danh_muc.h"
  
 extern GiaoDich* mang_thu;
 extern GiaoDich* mang_chi;
@@ -120,4 +121,21 @@ void kiemTraVaNhapNganSachHienTai() {
 		       thang_ht, nam_ht);
 		nhapNganSach();
 	}
+}
+void xemNganSachHienTai() {
+    // 1. Lấy tháng/năm hiện tại từ hệ thống
+    time_t now = time(NULL);
+    struct tm *tm_ht = localtime(&now);
+    int thang_ht = tm_ht->tm_mon + 1;
+    int nam_ht   = tm_ht->tm_year + 1900;
+
+    // 2. Tìm ngân sách của tháng/năm đó trong mảng
+    NganSach *ns_ht = timNganSach(thang_ht, nam_ht);
+
+        // In ra tổng ngân sách hiện tại
+        printf("\n=> NGAN SACH THANG %02d/%04d HIEN TAI LA: %d VND\n", 
+               thang_ht, nam_ht, ns_ht->so_tien_ns);
+        
+        // Gọi hàm từ danh_muc.c để in bảng phân bổ số tiền cho từng danh mục
+        tinhTienDanhMucChi(*ns_ht);
 }
