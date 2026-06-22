@@ -146,7 +146,7 @@ void inKetQuaTimKiem (struct GiaoDich mang[], int mang_ket_qua[], int so_ket_qua
     printf("\n%-10s %-12s %-15s %-12s %s\n", "Ma giao dich", "Ngay", "So tien", "Danh muc", "Ghi chu");
     for (int i = 0; i < so_ket_qua; i++) {
         struct GiaoDich *gd = &mang[mang_ket_qua[i]];
-        printf("%-10s %02d/%02d/%04d  %-15d %-12d %s\n", gd -> ma_gd, gd -> ngay, gd -> thang, gd -> nam, gd -> so_tien_gd, gd -> ma_dm, gd -> ghi_chu);
+        printf("%-10s %02d/%02d/%04d  %-15lld %-12d %s\n", gd -> ma_gd, gd -> ngay, gd -> thang, gd -> nam, gd -> so_tien_gd, gd -> ma_dm, gd -> ghi_chu);
     }
     printf("Tong: %d giao dich\n\n", so_ket_qua);
 }
@@ -174,11 +174,11 @@ void nhapVaTimKiemGiaoDich() {
     }
 
     // Nhập năm bắt đầu
-    printf("Nhap nam bat dau (>=1900, nhap -1 de bo qua): ");
+    printf("Nhap nam bat dau (>=1900 va <=9999, nhap -1 de bo qua): ");
     while (1) {
         nam_bd = nhapSoNguyen();
-        if (nam_bd == -1 || nam_bd >= 1900) break;
-        printf("Loi: Nam phai >= 1900 hoac -1. Nhap lai: ");
+        if (nam_bd == -1 || nam_bd >= 1900 || nam_bd <= 9999 ) break;
+        printf("Loi: Nam phai >= 1900 va <= 9999 hoac -1. Nhap lai: ");
     }
 
     // Nhập ngày kết thúc
@@ -198,11 +198,11 @@ void nhapVaTimKiemGiaoDich() {
     }
 
     // Nhập năm kết thúc
-    printf("Nhap nam ket thuc (>=1900, nhap -1 de bo qua): ");
+    printf("Nhap nam ket thuc (>=1900 va <=9999, nhap -1 de bo qua): ");
     while (1) {
         nam_kt = nhapSoNguyen();
-        if (nam_kt == -1 || nam_kt >= 1900) break;
-        printf("Loi: Nam phai >= 1900 hoac -1. Nhap lai: ");
+        if (nam_kt == -1 || nam_kt >= 1900 || nam_kt <= 9999) break;
+        printf("Loi: Nam phai >= 1900 va <= 9999 hoac -1. Nhap lai: ");
     }
 
     // Nhập mã danh mục
@@ -277,35 +277,35 @@ void nhapVaTimKiemGiaoDich() {
 // 3. SỐ DƯ
 
 // Tính lại số dư sau mỗi giao dịch
-void tinhLaiSoDu(int so_tien_ns_hien_tai){
-    int so_du = so_tien_ns_hien_tai;
+// void tinhLaiSoDu(int so_tien_ns_hien_tai){
+//     int so_du = so_tien_ns_hien_tai;
 
-    for (int i = 0; i < so_luong_giao_dich_thu; i++){
-        so_du += mang_thu[i].so_tien_gd;
-    }
+//     for (int i = 0; i < so_luong_giao_dich_thu; i++){
+//         so_du += mang_thu[i].so_tien_gd;
+//     }
 
-    for (int i = 0; i < so_luong_giao_dich_chi; i++){
-        so_du -= mang_chi[i].so_tien_gd;
-    }
-    g_so_du = so_du;
+//     for (int i = 0; i < so_luong_giao_dich_chi; i++){
+//         so_du -= mang_chi[i].so_tien_gd;
+//     }
+//     g_so_du = so_du;
 
-    if (g_so_du < 0){
-        printf("So du hien tai am: %d VND\n", g_so_du);
-    }
-}
+//     if (g_so_du < 0){
+//         printf("So du hien tai am: %d VND\n", g_so_du);
+//     }
+// }
 
 // Cập nhật số dư sau khi thêm/xóa giao dịch
-void capNhatSoDu (int delta){
-    g_so_du+= delta;
-    if (g_so_du < 0)
-    printf ("So du hien tai am: %d VND\n", g_so_du);
-}
+// void capNhatSoDu (int delta){
+//     g_so_du+= delta;
+//     if (g_so_du < 0)
+//     printf ("So du hien tai am: %d VND\n", g_so_du);
+// }
 
 
 // 4. TÍNH TOÁN TỔNG THU/CHI THEO NGÀY, THÁNG, NĂM, LOẠI DANH MỤC
 
 // Tính tổng thu chi
-void tinhTongThuChi (int loai_gd_loc, int ngay_loc, int thang_loc, int nam_loc, int ma_dm_loc, int *tong_thu, int *tong_chi){
+void tinhTongThuChi (int loai_gd_loc, int ngay_loc, int thang_loc, int nam_loc, int ma_dm_loc, long long *tong_thu, long long *tong_chi){
     *tong_thu = 0;
     *tong_chi = 0;
 
@@ -346,7 +346,7 @@ void giaiPhongGiaoDich() {
 // Hàm bọc chức năng 4
 void nhapVaTinhTongThuChi() {
     int loai_gd_loc, ngay_loc, thang_loc, nam_loc, ma_dm_loc;
-    int tong_thu = 0, tong_chi = 0;
+    long long tong_thu = 0, tong_chi = 0;
     
     // 1. Nhập loại giao dịch cần thống kê
     printf("Chon loai giao dich (0: Thu, 1: Chi, 2: Tat ca): ");
@@ -373,15 +373,15 @@ void nhapVaTinhTongThuChi() {
     tinhTongThuChi(loai_gd_loc, ngay_loc, thang_loc, nam_loc, ma_dm_loc, &tong_thu, &tong_chi);
 	
     if (loai_gd_loc == 0 || loai_gd_loc == 2) {
-        printf("Tong tien thu: %d VND\n", tong_thu);
+        printf("Tong tien thu: %lld VND\n", tong_thu);
     }
     if (loai_gd_loc == 1 || loai_gd_loc == 2) {
-        printf("Tong tien chi: %d VND\n", tong_chi);
+        printf("Tong tien chi: %lld VND\n", tong_chi);
     }
     
     // Nếu chọn xem cả 2, in thêm dòng chênh lệch (Số dư trong khoảng thời gian đó)
     if (loai_gd_loc == 2) {
-        printf("Chenh lech (thu - chi): %d VND\n", tong_thu - tong_chi);
+        printf("Chenh lech (thu - chi): %lld VND\n", tong_thu - tong_chi);
 }
 }
 
@@ -451,12 +451,12 @@ struct GiaoDich nhapGiaoDich() {
     xoaBuffer();
     
     // Nhap so tien
-    printf("\nSo tien giao dich (VND): ");
-    while (scanf("%d", &gd.so_tien_gd) != 1 || gd.so_tien_gd <= 0) {
-        printf("Loi: So tien phai lon hon 0. Nhap lai: ");
-        xoaBuffer();
+      printf("\nSo tien giao dich (VND): ");
+        gd.so_tien_gd = nhapLongLong();
+        while (gd.so_tien_gd <= 0) {
+            printf("Loi: So tien phai lon hon 0. Nhap lai: ");
+            gd.so_tien_gd = nhapLongLong();
     }
-    xoaBuffer();
     
     // Nhap ngay thang nam
     printf("\nNgay giao dich (1-31): ");
@@ -473,9 +473,9 @@ struct GiaoDich nhapGiaoDich() {
     }
     xoaBuffer();
     
-    printf("Nam giao dich (>= 1900): ");
-    while (scanf("%d", &gd.nam) != 1 || gd.nam < 1900) {
-        printf("Loi: Nam phai >= 1900. Nhap lai: ");
+    printf("Nam giao dich (>= 1900 va <= 9999): ");
+    while (scanf("%d", &gd.nam) != 1 || gd.nam < 1900 || gd.nam > 9999) {
+        printf("Loi: Nam phai >= 1900 va <= 9999. Nhap lai: ");
         xoaBuffer();
     }
     xoaBuffer();
@@ -560,7 +560,7 @@ struct GiaoDich nhapGiaoDich() {
     return gd;
 }
 
-void themGiaoDich(int so_tien_gd,
+void themGiaoDich (long long so_tien_gd,
                   int ngay, int thang, int nam,
                   int loai_gd,
                   const char *ghi_chu,
@@ -683,9 +683,9 @@ void nhapVaXoaGiaoDich() {
     }
     xoaBuffer();
     
-    printf("Nam giao dich (>= 1900): ");
-    while (scanf("%d", &nam) != 1 || nam < 1900) {
-        printf("Loi: Nam phai >= 1900. Nhap lai: ");
+    printf("Nam giao dich (>= 1900 va <= 9999): ");
+    while (scanf("%d", &nam) != 1 || nam < 1900 || nam > 9999) {
+        printf("Loi: Nam phai >= 1900 va <= 9999. Nhap lai: ");
         xoaBuffer();
     }
 	xoaBuffer();
@@ -784,9 +784,9 @@ void xoaGiaoDich(int ngay, int thang, int nam) {
     // -- 7. Lay thong tin GD truoc khi xoa (de cap nhat so du) --
     struct GiaoDich *mang_dich = (loai_xoa == 0) ? mang_thu : mang_chi;
     int             *so_luong  = (loai_xoa == 0) ? &so_luong_giao_dich_thu : &so_luong_giao_dich_chi;
-    int so_tien_xoa = mang_dich[vi_tri_xoa].so_tien_gd;
+    long long so_tien_xoa = mang_dich[vi_tri_xoa].so_tien_gd;
  
-    printf("Xac nhan xoa GD %s - %d VND - %s? (y/n): ",
+    printf("Xac nhan xoa GD %s - %lld VND - %s? (y/n): ",
            mang_dich[vi_tri_xoa].ma_gd,
            mang_dich[vi_tri_xoa].so_tien_gd,
            mang_dich[vi_tri_xoa].ghi_chu);
@@ -804,13 +804,13 @@ void xoaGiaoDich(int ngay, int thang, int nam) {
     }
     (*so_luong)--;
  
-    // -- 9. Cap nhat so du --
-    if (loai_xoa == 0) {
-        g_so_du -= so_tien_xoa; // xoa GD thu -> so du giam
-    } else {
-        g_so_du += so_tien_xoa; // xoa GD chi -> so du tang
-    }
+    // // -- 9. Cap nhat so du --
+    // if (loai_xoa == 0) {
+    //     g_so_du -= so_tien_xoa; // xoa GD thu -> so du giam
+    // } else {
+    //     g_so_du += so_tien_xoa; // xoa GD chi -> so du tang
+    // }
  
-    printf("Da xoa giao dich %s thanh cong. So du hien tai: %d VND\n",
-           ma_xoa, g_so_du);
+    // printf("Da xoa giao dich %s thanh cong. So du hien tai: %d VND\n",
+    //        ma_xoa, g_so_du);
 }
