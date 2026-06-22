@@ -16,7 +16,6 @@ extern int so_luong_giao_dich_thu;
 extern int so_luong_chi;
 extern int suc_chua_thu;
 extern int suc_chua_chi;
-extern int g_so_du;
 
 void xoaBuffer(void);
 int soSanhNgay (struct GiaoDich a, struct GiaoDich b);
@@ -25,8 +24,6 @@ int timKiemGiaoDich (struct GiaoDich mang[], int so_luong, int ngay_bd, int than
                      int ngay_kt, int thang_kt, int nam_kt, int ma_dm_loc, int mang_ket_qua[]);
 void inKetQuaTimKiem (struct GiaoDich mang[], int mang_ket_qua[], int so_ket_qua);
 void nhapVaTimKiemGiaoDich();
-// void tinhLaiSoDu(int so_tien_ns_hien_tai);
-// void capNhatSoDu (int delta);
 void tinhtongThuChi (int loai_gd_loc, int ngay_loc, int thang_loc, int nam_loc, int ma_dm_loc, long long *tong_thu, long long *tong_chi);
 void nhapVaTinhTongThuChi();
 struct GiaoDich nhapGiaoDich();
