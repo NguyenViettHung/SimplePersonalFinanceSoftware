@@ -177,7 +177,7 @@ void nhapVaTimKiemGiaoDich() {
     printf("Nhap nam bat dau (>=1900 va <=9999, nhap -1 de bo qua): ");
     while (1) {
         nam_bd = nhapSoNguyen();
-        if (nam_bd == -1 || nam_bd >= 1900 || nam_bd <= 9999 ) break;
+        if (nam_bd == -1 || nam_bd >= 1900 && nam_bd <= 9999 ) break;
         printf("Loi: Nam phai >= 1900 va <= 9999 hoac -1. Nhap lai: ");
     }
 
@@ -201,7 +201,7 @@ void nhapVaTimKiemGiaoDich() {
     printf("Nhap nam ket thuc (>=1900 va <=9999, nhap -1 de bo qua): ");
     while (1) {
         nam_kt = nhapSoNguyen();
-        if (nam_kt == -1 || nam_kt >= 1900 || nam_kt <= 9999) break;
+        if (nam_kt == -1 || nam_kt >= 1900 && nam_kt <= 9999) break;
         printf("Loi: Nam phai >= 1900 va <= 9999 hoac -1. Nhap lai: ");
     }
 
