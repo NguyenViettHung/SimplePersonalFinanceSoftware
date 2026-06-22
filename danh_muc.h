@@ -10,6 +10,7 @@ extern int so_luong_dm_chi;
 
 // Chỉ cho phép nhập số nguyên, từ chối chữ/ký tự đặc biệt
 int nhapSoNguyen();
+long long nhapLongLong();
 int tongHanMuc();
 void xemDanhSachDanhMuc();
 void themDanhMuc();
@@ -19,7 +20,7 @@ void hoanDoiHanMucChi();
 void tinhTienDanhMucChi(NganSach ns);
 void tinhTiLeChi(NganSach ns);
 void nhapVaTinhTiLeChi();
-void truHanMucVaCanhBao(int ma_dm, int so_tien);
+void truHanMucVaCanhBao(int ma_dm, long long so_tien);
 void capNhatHanMucTien();
 
 #endif
