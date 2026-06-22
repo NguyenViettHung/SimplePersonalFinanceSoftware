@@ -17,6 +17,8 @@ extern int so_luong_dm_chi;
 extern int so_luong_dm_thu;
 extern int so_luong_ngan_sach;
 extern int suc_chua_ngan_sach;
+extern int suc_chua_thu;
+extern int suc_chua_chi;
 // Hàm đọc file
 void docFileGiaoDich() {
     FILE *file = fopen("giao_dich.txt", "r");
@@ -40,7 +42,7 @@ char *token = strtok(line, ",");
         if (token == NULL) continue;
         strcpy(gd_temp.ma_gd, token);
         
-        token = strtok(NULL, ","); if (token) gd_temp.so_tien_gd = atoi(token);
+        token = strtok(NULL, ","); if (token) gd_temp.so_tien_gd = atoll(token);
         token = strtok(NULL, ","); if (token) gd_temp.ngay       = atoi(token); 
         token = strtok(NULL, ","); if (token) gd_temp.thang      = atoi(token);
         token = strtok(NULL, ","); if (token) gd_temp.nam        = atoi(token);
@@ -64,7 +66,7 @@ char *token = strtok(line, ",");
         //     BẮT ĐẦU BỘ LỌC
         // 1. Chặn số tiền âm hoặc bằng 0
         if (gd_temp.so_tien_gd <= 0) {
-            printf("Canh bao Giao dich '%s': So tien (%d) khong hop le. Da bo qua!\n", gd_temp.ma_gd, gd_temp.so_tien_gd);
+            printf("Canh bao Giao dich '%s': So tien (%lld) khong hop le. Da bo qua!\n", gd_temp.ma_gd, gd_temp.so_tien_gd);
             continue;
         }
 
@@ -103,11 +105,17 @@ char *token = strtok(line, ",");
             so_luong_giao_dich_thu++;
             mang_thu = (struct GiaoDich*) realloc(mang_thu, so_luong_giao_dich_thu * sizeof(struct GiaoDich));
             mang_thu[so_luong_giao_dich_thu - 1] = gd_temp;
+            
+            // THÊM DÒNG NÀY ĐỂ ĐỒNG BỘ SỨC CHỨA
+            suc_chua_thu = so_luong_giao_dich_thu; 
         }
         else if (gd_temp.loai_gd == 1){
             so_luong_giao_dich_chi++;
             mang_chi = (struct GiaoDich*) realloc(mang_chi, so_luong_giao_dich_chi * sizeof(struct GiaoDich));
             mang_chi[so_luong_giao_dich_chi - 1] = gd_temp;
+            
+            // THÊM DÒNG NÀY ĐỂ ĐỒNG BỘ SỨC CHỨA
+            suc_chua_chi = so_luong_giao_dich_chi; 
         }
     }
     fclose(file);
@@ -128,7 +136,7 @@ void ghiFileGiaoDich(){
 
     // Ghi mảng thu
     for (int i = 0; i < so_luong_giao_dich_thu; i++){
-        fprintf(file, "%s,%d,%d,%d,%d,%d,%d,%s,%s\n",
+        fprintf(file, "%s,%lld,%d,%d,%d,%d,%d,%s,%s\n",
                 mang_thu[i].ma_gd, 
                 mang_thu[i].so_tien_gd,
                 mang_thu[i].ngay, mang_thu[i].thang, mang_thu[i].nam,
@@ -140,7 +148,7 @@ void ghiFileGiaoDich(){
 
     // Ghi mảng chi
     for (int i = 0; i < so_luong_giao_dich_chi; i++){
-        fprintf(file, "%s,%d,%d,%d,%d,%d,%d,%s,%s\n",
+        fprintf(file, "%s,%lld,%d,%d,%d,%d,%d,%s,%s\n",
                 mang_chi[i].ma_gd, 
                 mang_chi[i].so_tien_gd,
                 mang_chi[i].ngay, mang_chi[i].thang, mang_chi[i].nam,
@@ -314,7 +322,7 @@ void docFileNganSach() {
         
         token = strtok(NULL, ",");
         if (token == NULL) continue;
-        ns_tam.so_tien_ns = atoi(token);
+        ns_tam.so_tien_ns = atoll(token);
         
         token = strtok(NULL, ",");
         if (token == NULL) continue;
@@ -339,7 +347,7 @@ void docFileNganSach() {
             continue;
         }
 
-        if (ns_tam.nam < 1900) {
+        if (ns_tam.nam < 1900 || ns_tam.nam >9999 ) {
             printf("Canh bao: %s co nam khong hop le, bo qua.\n", ns_tam.ma_ns);
             continue;
         }
@@ -373,7 +381,7 @@ void ghiFileNganSach() {
     }
 
     for (int i = 0; i < so_luong_ngan_sach; i++) {
-        fprintf(file, "%s,%d,%d,%d\n",
+        fprintf(file, "%s,%lld,%d,%d\n",
                 mang_ngan_sach[i].ma_ns,
                 mang_ngan_sach[i].so_tien_ns,
                 mang_ngan_sach[i].thang,
