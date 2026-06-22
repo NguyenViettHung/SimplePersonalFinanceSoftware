@@ -274,34 +274,6 @@ void nhapVaTimKiemGiaoDich() {
     free(mang_ket_qua_chi);
 }
 
-// 3. SỐ DƯ
-
-// Tính lại số dư sau mỗi giao dịch
-// void tinhLaiSoDu(int so_tien_ns_hien_tai){
-//     int so_du = so_tien_ns_hien_tai;
-
-//     for (int i = 0; i < so_luong_giao_dich_thu; i++){
-//         so_du += mang_thu[i].so_tien_gd;
-//     }
-
-//     for (int i = 0; i < so_luong_giao_dich_chi; i++){
-//         so_du -= mang_chi[i].so_tien_gd;
-//     }
-//     g_so_du = so_du;
-
-//     if (g_so_du < 0){
-//         printf("So du hien tai am: %d VND\n", g_so_du);
-//     }
-// }
-
-// Cập nhật số dư sau khi thêm/xóa giao dịch
-// void capNhatSoDu (int delta){
-//     g_so_du+= delta;
-//     if (g_so_du < 0)
-//     printf ("So du hien tai am: %d VND\n", g_so_du);
-// }
-
-
 // 4. TÍNH TOÁN TỔNG THU/CHI THEO NGÀY, THÁNG, NĂM, LOẠI DANH MỤC
 
 // Tính tổng thu chi
