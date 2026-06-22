@@ -27,10 +27,10 @@ void baoCaoVuotHanMuc() {
 
     for (int i = 0; i < so_luong_dm_chi; i++) {
         if (mang_dm_chi[i].han_muc_tien < 0) {
-            int da_chi = mang_dm_chi[i].han_muc_tien_goc 
+            long long da_chi = mang_dm_chi[i].han_muc_tien_goc 
                        - mang_dm_chi[i].han_muc_tien;
 
-            printf("%-5d | %-15s | %-12d | %-12d | %d VND\n",
+            printf("%-5d | %-15s | %-12d | %-12lld | %lld VND\n",
                    mang_dm_chi[i].ma_dm,
                    mang_dm_chi[i].ten_dm,
                    mang_dm_chi[i].han_muc_tien_goc,
