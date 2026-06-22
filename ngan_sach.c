@@ -33,7 +33,6 @@ void giaiPhongNganSach() {
     suc_chua_ngan_sach = 0;
 }
 
-// =====================================================
 // TIM NGAN SACH THEO THANG/NAM
 // Tra ve con tro den NganSach neu tim thay, NULL neu khong
 // =====================================================
@@ -54,7 +53,7 @@ NganSach *timNganSach(int thang, int nam) {
 //   - so_tien_ns = 0 duoc coi la chua co ngan sach
 // =====================================================
 void nhapNganSach() {
-    // -- 1. Lay thang/nam hien tai --
+    // 1. Lay thang/nam hien tai
     time_t now = time(NULL);
     struct tm *t = localtime(&now);
     int thang_ht = t->tm_mon + 1;   // tm_mon: 0-11
@@ -62,16 +61,16 @@ void nhapNganSach() {
  
     printf("\n========== NGAN SACH THANG %02d/%04d ==========\n", thang_ht, nam_ht);
  
-    // -- 2. Kiem tra da co ngan sach thang nay chua --
+    // 2. Kiem tra da co ngan sach thang nay chua
     NganSach *ns_ht = timNganSach(thang_ht, nam_ht);
  
     if (ns_ht != NULL && ns_ht->so_tien_ns > 0) {
-        printf("Ngan sach hien tai: %d VND\n", ns_ht->so_tien_ns);
+        printf("Ngan sach hien tai: %lld VND\n", ns_ht->so_tien_ns);
         printf("Ban co muon cap nhat ngan sach thang nay khong? (y/n): ");
         char lua_chon[4];
         if (fgets(lua_chon, sizeof(lua_chon), stdin) == NULL) return;
         if (lua_chon[0] != 'y' && lua_chon[0] != 'Y') {
-            printf("Giu nguyen ngan sach: %d VND\n", ns_ht->so_tien_ns);
+            printf("Giu nguyen ngan sach: %lld VND\n", ns_ht->so_tien_ns);
             return;
         }
     } else {
@@ -79,20 +78,19 @@ void nhapNganSach() {
         printf("Vui long nhap ngan sach truoc khi thuc hien cac chuc nang khac.\n");
     }
  
-    // -- 3. Nhap so tien ngan sach --
-    int so_tien_moi = 0;
+    // 3. Nhap so tien ngan sach
+   long long so_tien_moi = 0;
     printf("Nhap so tien ngan sach (VND, > 0): ");
-    while (scanf("%d", &so_tien_moi) != 1 || so_tien_moi <= 0) {
+    so_tien_moi = nhapLongLong();
+    while (so_tien_moi <= 0) {
         printf("Loi: so tien phai lon hon 0. Nhap lai: ");
-        while (getchar() != '\n');
+        so_tien_moi = nhapLongLong();
     }
-    while (getchar() != '\n'); // xoa buffer
- 
-    // -- 4. Cap nhat hoac them moi --
+    // 4. Cap nhat hoac them moi
     if (ns_ht != NULL) {
         // Cap nhat ngan sach cu
         ns_ht->so_tien_ns = so_tien_moi;
-        printf("Da cap nhat ngan sach thang %02d/%04d: %d VND\n",
+        printf("Da cap nhat ngan sach thang %02d/%04d: %lld VND\n",
                thang_ht, nam_ht, so_tien_moi);
     } else {
         // Them ngan sach moi
@@ -106,7 +104,7 @@ void nhapNganSach() {
         ns_moi.nam        = nam_ht;
  
         mang_ngan_sach[so_luong_ngan_sach - 1] = ns_moi;
-        printf("Da tao ngan sach %s: %d VND\n", ns_moi.ma_ns, so_tien_moi);
+        printf("Da tao ngan sach %s: %lld VND\n", ns_moi.ma_ns, so_tien_moi);
     }
 }
 
@@ -133,9 +131,8 @@ void xemNganSachHienTai() {
     NganSach *ns_ht = timNganSach(thang_ht, nam_ht);
 
         // In ra tổng ngân sách hiện tại
-        printf("\n=> NGAN SACH THANG %02d/%04d HIEN TAI LA: %d VND\n", 
+        printf("\n=> NGAN SACH THANG %02d/%04d HIEN TAI LA: %lld VND\n", 
                thang_ht, nam_ht, ns_ht->so_tien_ns);
         
-        // Gọi hàm từ danh_muc.c để in bảng phân bổ số tiền cho từng danh mục
         tinhTienDanhMucChi(*ns_ht);
 }
