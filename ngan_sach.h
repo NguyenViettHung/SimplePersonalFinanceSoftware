@@ -3,7 +3,7 @@
 
 #include "khai_bao.h" 
 
-void khoiTaoNganSach(int initial_capacity);
+void khoiTaoNganSach(int khoi_tao_suc_chua);
 void docFileNganSach();
 void ghiFileNganSach();
 void giaiPhongNganSach();
