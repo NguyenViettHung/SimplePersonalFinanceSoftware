@@ -10,5 +10,6 @@ void giaiPhongNganSach();
 NganSach *timNganSach(int thang, int nam);
 void nhapNganSach();
 void kiemTraVaNhapNganSachHienTai();
+void xemNganSachHienTai();
 
 #endif
