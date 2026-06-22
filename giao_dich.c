@@ -213,7 +213,7 @@ void nhapVaTimKiemGiaoDich() {
         printf("Loi: Ma danh muc phai >= 0 hoac -1. Nhap lai: ");
     }
 
-    // Cấp phát động mảng kết quả cho thu
+    // -- Cấp phát động mảng kết quả cho thu --
     int *mang_ket_qua_thu = NULL;
     int so_ket_qua_thu = 0;
     if (so_luong_giao_dich_thu > 0) {
@@ -234,7 +234,7 @@ void nhapVaTimKiemGiaoDich() {
         );
     }
 
-    // Cấp phát động mảng kết quả cho chi
+    // -- Cấp phát động mảng kết quả cho chi --
     int *mang_ket_qua_chi = NULL;
     int so_ket_qua_chi = 0;
     if (so_luong_giao_dich_chi > 0) {
@@ -256,7 +256,7 @@ void nhapVaTimKiemGiaoDich() {
         );
     }
 
-    // In kết quả
+    // -- In kết quả --
     printf("\n--- KET QUA TIM KIEM (THU) ---\n");
     if (so_luong_giao_dich_thu > 0 && mang_ket_qua_thu != NULL)
         inKetQuaTimKiem(mang_thu, mang_ket_qua_thu, so_ket_qua_thu);
@@ -269,11 +269,10 @@ void nhapVaTimKiemGiaoDich() {
     else
         printf("Khong co giao dich chi nao.\n");
 
-    // Giải phóng bộ nhớ
+    // -- Giải phóng bộ nhớ --
     free(mang_ket_qua_thu);
     free(mang_ket_qua_chi);
 }
-
 
 // 3. SỐ DƯ
 
