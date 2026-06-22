@@ -1,7 +1,7 @@
 // Tạo, xóa danh mục
 // Quản lý % cho các danh mục (gồm chia %, hoán đổi %)
 // Tính tiền cho các danh mục dựa vào % được chia và ngân sách
-
+// Tính tiền chi tiêu thực tế của từng danh mục
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -50,6 +50,40 @@ int nhapSoNguyen() {
                 printf("Vui long nhap mot so nguyen duy nhat: ");
                 
                 // Dọn dẹp nốt phần đuôi thừa trong bộ đệm
+                while (ki_tu_thua != '\n' && ki_tu_thua != EOF) {
+                    ki_tu_thua = getchar();
+                }
+            }
+        }
+    }
+}
+// Thay thế cho nhapSoNguyen() khi cần xử lý số tiền lớn
+long long nhapLongLong() {
+    long long gia_tri;
+    int check;
+    char ki_tu_thua;
+
+    while (1) { 
+        // Sử dụng %lld để nhận diện long long
+        check = scanf("%lld", &gia_tri);
+
+        if (check != 1) {
+            printf("\nDu lieu khong phai la so! Vui long chi nhap so nguyen.\n");
+            printf("Nhap lai: ");
+            
+            // Dọn dẹp bộ nhớ đệm
+            while (getchar() != '\n'); 
+        } else {
+            // Kiểm tra ký tự thừa phía sau con số
+            scanf("%c", &ki_tu_thua);
+            
+            if (ki_tu_thua == '\n') {
+                return gia_tri; // Nhập đúng và kết thúc bằng Enter
+            } else {
+                printf("\nDu lieu khong phai la so nguyen!\n");
+                printf("Vui long nhap mot so nguyen duy nhat: ");
+                
+                // Dọn dẹp phần đuôi thừa
                 while (ki_tu_thua != '\n' && ki_tu_thua != EOF) {
                     ki_tu_thua = getchar();
                 }
@@ -338,24 +372,22 @@ void tinhTienDanhMucChi(NganSach ns) {
     }
 
     printf("\n=== PHAN BO NGAN SACH: %s ===\n", ns.ma_ns);
-    printf("Tong ngan sach: %d VND\n", ns.so_tien_ns);
+    printf("Tong ngan sach: %lld VND\n", ns.so_tien_ns);
     printf("---------------------------------------------------\n");
 
-    int tong_da_phan_bo = 0;
+    long long tong_da_phan_bo = 0;
 
     for (int i = 0; i < so_luong_dm_chi; i++) {
-        int so_tien_dm;
+        long long so_tien_dm;
 
         if (i == so_luong_dm_chi - 1) {
-            // Danh mục cuối: lấy phần còn lại để tránh mất tiền do làm tròn
             so_tien_dm = ns.so_tien_ns - tong_da_phan_bo;
         } else {
-            // Các danh mục trước: làm tròn xuống bình thường
             so_tien_dm = ns.so_tien_ns * mang_dm_chi[i].han_muc / 100;
             tong_da_phan_bo += so_tien_dm;
         }
 
-        printf("Ma: %-3d | Ten: %-15s | Han muc: %3d%% | So tien: %d VND\n",
+        printf("Ma: %-3d | Ten: %-15s | Han muc: %3d%% | So tien: %lld VND\n",
                mang_dm_chi[i].ma_dm,
                mang_dm_chi[i].ten_dm,
                mang_dm_chi[i].han_muc,
@@ -363,7 +395,7 @@ void tinhTienDanhMucChi(NganSach ns) {
     }
 
     printf("---------------------------------------------------\n");
-    printf("=> Tong da phan bo: %d VND\n", ns.so_tien_ns);
+    printf("=> Tong da phan bo: %lld VND\n", ns.so_tien_ns);
 }
 
 // Tính % tỉ lệ chi của từng danh mục so với tổng đã chi
@@ -374,25 +406,18 @@ void tinhTiLeChi(NganSach ns) {
         return;
     }
 
-    int *so_tien_dm = (int*) calloc(so_luong_dm_chi, sizeof(int));
+    long long *so_tien_dm = (long long*) calloc(so_luong_dm_chi, sizeof(long long));
     if (so_tien_dm == NULL) {
         printf("\nLoi cap phat bo nho!\n");
         return;
     }
 
-    int tong_da_chi = 0;
+    long long tong_da_chi = 0;
 
-    // Lọc giao dịch chi theo khoảng thời gian (tháng hoặc năm)
     for (int i = 0; i < so_luong_giao_dich_chi; i++) {
-        if (mang_chi[i].loai_gd != 1) {
-            continue;
-        }
-        if (ns.thang != -1 && mang_chi[i].thang != ns.thang) {
-            continue;
-        }
-        if (ns.nam != -1 && mang_chi[i].nam != ns.nam) {
-            continue;
-        }
+        if (mang_chi[i].loai_gd != 1) continue;
+        if (ns.thang != -1 && mang_chi[i].thang != ns.thang) continue;
+        if (ns.nam != -1 && mang_chi[i].nam != ns.nam) continue;
 
         for (int j = 0; j < so_luong_dm_chi; j++) {
             if (mang_dm_chi[j].ma_dm == mang_chi[i].ma_dm) {
@@ -404,37 +429,31 @@ void tinhTiLeChi(NganSach ns) {
     }
 
     if (tong_da_chi == 0) {
-        if (ns.thang != -1) {
+        if (ns.thang != -1)
             printf("\nChua co giao dich Chi nao trong thang %d/%d!\n", ns.thang, ns.nam);
-        } else {
+        else
             printf("\nChua co giao dich Chi nao trong nam %d!\n", ns.nam);
-        }
         free(so_tien_dm);
         return;
     }
 
-    if (ns.thang != -1) {
+    if (ns.thang != -1)
         printf("\n=== TI LE CHI GIUA CAC DANH MUC [%d/%d] ===\n", ns.thang, ns.nam);
-    } else {
+    else
         printf("\n=== TI LE CHI GIUA CAC DANH MUC [%d] ===\n", ns.nam);
-    }
-    printf("Tong da chi: %d VND\n", tong_da_chi);
+    printf("Tong da chi: %lld VND\n", tong_da_chi);
     printf("--------------------------------------------------------------\n");
 
     for (int i = 0; i < so_luong_dm_chi; i++) {
-        double tiLe = tong_da_chi > 0
-            ? (double)so_tien_dm[i] / tong_da_chi * 100.0
-            : 0.0;    //Trường hợp tổng đã chi = 0
-        printf("ID: %-3d | Ten: %-15s | Da chi: %-10d VND | Ti le: %.2f%%\n",
+        double tiLe = tong_da_chi > 0 ? (double)so_tien_dm[i] / tong_da_chi * 100.0 : 0.0;
+        printf("ID: %-3d | Ten: %-15s | Da chi: %-10lld VND | Ti le: %.2f%%\n",
                mang_dm_chi[i].ma_dm,
                mang_dm_chi[i].ten_dm,
                so_tien_dm[i],
                tiLe);
     }
-
     printf("--------------------------------------------------------------\n");
-    printf("=> Tong: %d VND | 100.00%%\n", tong_da_chi);
-
+    printf("=> Tong: %lld VND | 100.00%%\n", tong_da_chi);
     free(so_tien_dm);
 }
 //Lam theo case 6 trong menu
@@ -470,13 +489,13 @@ void nhapVaTinhTiLeChi() {
     }
 
     // Xử lý nhập năm
-    printf("Nam (>= 1900): ");
+    printf("Nam (>= 1900 va <= 9999): ");
     while (1) {
         ns.nam = nhapSoNguyen();
-        if (ns.nam >= 1900) {
+        if (ns.nam >= 1900 && ns.nam <= 9999) {
             break;
         }
-        printf("Loi: Nam phai >= 1900. Nhap lai: ");
+        printf("Loi: Nam phai >= 1900 va <= 9999. Nhap lai: ");
     }
 
     if (ns.thang != -1) {
@@ -489,7 +508,7 @@ void nhapVaTinhTiLeChi() {
     tinhTiLeChi(ns);
 }
 
-void truHanMucVaCanhBao(int ma_dm, int so_tien) {
+void truHanMucVaCanhBao(int ma_dm, long long so_tien) {
     int vi_tri = -1;
     for (int i = 0; i < so_luong_dm_chi; i++) {
         if (mang_dm_chi[i].ma_dm == ma_dm) {
@@ -501,19 +520,19 @@ void truHanMucVaCanhBao(int ma_dm, int so_tien) {
 
     mang_dm_chi[vi_tri].han_muc_tien -= so_tien;
 
-    int con_lai = mang_dm_chi[vi_tri].han_muc_tien;
-    int goc     = mang_dm_chi[vi_tri].han_muc_tien_goc;
+    long long con_lai = mang_dm_chi[vi_tri].han_muc_tien;
+    long long goc     = mang_dm_chi[vi_tri].han_muc_tien_goc;
 
     if (con_lai <= 0) {
         printf("\n!!! CANH BAO: '%s' da VUOT HAN MUC!\n",
                mang_dm_chi[vi_tri].ten_dm);
-        printf("    Han muc goc : %d VND\n", goc);
-        printf("    Vuot        : %d VND\n", -con_lai);
+        printf("    Han muc goc : %lld VND\n", goc);
+        printf("    Vuot        : %lld VND\n", -con_lai);
     } else if (goc > 0 && con_lai <= goc * 20 / 100) {
         printf("\n!!! CANH BAO: '%s' da su dung >= 80%% han muc!\n",
                mang_dm_chi[vi_tri].ten_dm);
-        printf("    Han muc goc : %d VND\n", goc);
-        printf("    Con lai     : %d VND (%.1f%%)\n",
+        printf("    Han muc goc : %lld VND\n", goc);
+        printf("    Con lai     : %lld VND (%.1f%%)\n",
                con_lai, (float)con_lai / goc * 100);
     }
 }
@@ -600,10 +619,10 @@ void xoaDanhMuc() {
     }
 }
 
-static int laySoTienNS(int thang, int nam) {
+static long long laySoTienNS(int thang, int nam) {
     for (int i = 0; i < so_luong_ngan_sach; i++) {
         if (mang_ngan_sach[i].thang == thang &&
-            mang_ngan_sach[i].nam   == nam)
+             mang_ngan_sach[i].nam == nam)
             return mang_ngan_sach[i].so_tien_ns;
     }
     return 0;
@@ -611,8 +630,8 @@ static int laySoTienNS(int thang, int nam) {
  
 //tong tien da chi cho 1 danh muc trong thang/nam
 
-static int tinhTongDaChi(int ma_dm, int thang, int nam) {
-    int tong = 0;
+static long long tinhTongDaChi(int ma_dm, int thang, int nam) {
+    long long tong = 0;
     for (int i = 0; i < so_luong_giao_dich_chi; i++) {
         struct GiaoDich *gd = &mang_chi[i];
         if (gd->ma_dm == ma_dm && gd->thang == thang && gd->nam == nam)
@@ -622,23 +641,16 @@ static int tinhTongDaChi(int ma_dm, int thang, int nam) {
 }
  
 void capNhatHanMucTien() {
-    // 1. Lay thang/nam hien tai
     time_t now = time(NULL);
     struct tm *t = localtime(&now);
     int thang_ht = t->tm_mon + 1;
     int nam_ht   = t->tm_year + 1900;
- 
-    // 2. Lay so tien ngan sach thang nay
-    int so_tien_ns = laySoTienNS(thang_ht, nam_ht);
-    // 3. Tinh han_muc_tien_goc va han_muc_tien cho tung danh muc
+
+    long long so_tien_ns = laySoTienNS(thang_ht, nam_ht);
     for (int i = 0; i < so_luong_dm_chi; i++) {
         DanhMuc *dm = &mang_dm_chi[i];
- 
-        // Goc: tinh tu % va ngan sach, khong doi trong thang
         dm->han_muc_tien_goc = so_tien_ns * dm->han_muc / 100;
- 
-        // Con lai: tru di nhung gi da chi trong thang nay
-        int tong_da_chi  = tinhTongDaChi(dm->ma_dm, thang_ht, nam_ht);
+        long long tong_da_chi = tinhTongDaChi(dm->ma_dm, thang_ht, nam_ht);
         dm->han_muc_tien = dm->han_muc_tien_goc - tong_da_chi;
     }
 }
